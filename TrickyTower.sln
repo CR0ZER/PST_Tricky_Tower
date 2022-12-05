@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TrickyTower", "TrickyTower\TrickyTower.pyproj", "{D3311B4C-49E1-4553-B455-23581CDA1FE7}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TrickyTowerServerTemplate", "TrickyTowerServerTemplate\TrickyTowerServerTemplate.pyproj", "{8DDBE3DD-0406-426F-A8D8-EBC183471418}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D3311B4C-49E1-4553-B455-23581CDA1FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3311B4C-49E1-4553-B455-23581CDA1FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDBE3DD-0406-426F-A8D8-EBC183471418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDBE3DD-0406-426F-A8D8-EBC183471418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
