@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8ddbe3dd-0406-426f-a8d8-ebc183471418</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>TrickyTowerServerTemplate.py</StartupFile>
+    <StartupFile>src\TrickyTowerServerTemplate.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,10 +21,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="TrickyTowerServerTemplate.py" />
+    <Compile Include="src\constants.py" />
+    <Compile Include="src\network.py" />
+    <Compile Include="src\TrickyTowerServerTemplate.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

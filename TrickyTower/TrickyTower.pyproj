@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>d3311b4c-49e1-4553-b455-23581cda1fe7</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>TrickyTower.py</StartupFile>
+    <StartupFile>src\TrickyTower.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="TrickyTower.py" />
+    <Compile Include="src\constants.py" />
+    <Compile Include="src\datahandler.py" />
+    <Compile Include="src\network.py" />
+    <Compile Include="src\packettypes.py" />
+    <Compile Include="src\TrickyTower.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.11" />
@@ -31,6 +35,9 @@
     <Content Include=".gitattributes" />
     <Content Include="README.md" />
     <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
