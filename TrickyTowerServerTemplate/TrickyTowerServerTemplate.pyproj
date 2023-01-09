@@ -25,7 +25,6 @@
     <Compile Include="src\datahandler.py" />
     <Compile Include="src\gamelogic.py" />
     <Compile Include="src\global_vars.py" />
-    <Compile Include="src\network.py" />
     <Compile Include="src\objects.py" />
     <Compile Include="src\packettypes.py" />
     <Compile Include="src\server.py" />

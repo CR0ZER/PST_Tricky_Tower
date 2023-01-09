@@ -101,15 +101,11 @@ class gameServerProtocol(LineReceiver):
         global dataHandler
         clientIndex = self.factory.clients.index(self)
 
-        # handle base64 data
-        # decodedData = base64.b64decode(data)
-        decodedData = data
-
         g.connectionLogger.debug(
             "Received data from " + str(self.transport.getPeer().host))
-        g.connectionLogger.debug(" -> " + str(decodedData))
+        g.connectionLogger.debug(" -> " + str(data))
 
-        dataHandler.handleData(clientIndex, decodedData)
+        dataHandler.handleData(clientIndex, data)
 
     def closeConnection(self, index):
         ''' closes connection with client #index '''

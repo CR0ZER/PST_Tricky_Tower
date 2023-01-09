@@ -39,19 +39,15 @@ class gameClientProtocol(LineReceiver):
             password = "password"  # g.gameEngine.menuLogin.password
 
             g.tcpConn.sendLogin(username, password)
-        log("Connection established to server")
+            log("Connection established to server")
 
     def lineReceived(self, data):
         global dataHandler
 
-        # handle base64 data
-        # decodedData = base64.b64decode(data)
-        decodedData = str(data)
+        log("Received data from server")
+        log(" -> " + data)
 
-        # log("Received data from server")
-        # log(" -> " + decodedData)
-
-        dataHandler.handleData(decodedData)
+        dataHandler.handleData(data)
 
     def sendData(self, data):
         # encode data using base64
