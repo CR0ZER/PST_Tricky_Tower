@@ -3,8 +3,12 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet import reactor, error
 from twisted.python.failure import Failure
 
+import base64
+
 from constants import *
 from datahandler import *
+import global_vars as g
+from utils import *
 
 
 def startConnection():
@@ -18,7 +22,8 @@ def startConnection():
 
 class gameClientProtocol(LineReceiver):
     MAX_LENGTH = (
-        999999  # todo: find a suitable size (see client: sendMap (in clienttcp.py))
+        # todo: find a suitable size (see client: sendMap (in clienttcp.py))
+        999999
     )
 
     def __init__(self, factory):
@@ -28,20 +33,21 @@ class gameClientProtocol(LineReceiver):
         """called when connection has been made"""
         """ used for logging in and new account """
 
-        # if g.gameState == MENU_LOGIN:
-        #    # logging in, so send login after connection has been established
-        #    username = g.gameEngine.menuLogin.username
-        #    password = g.gameEngine.menuLogin.password
+        if g.gameState == MENU_LOGIN:
+            # logging in, so send login after connection has been established
+            username = "bob"  # g.gameEngine.menuLogin.username
+            password = "password"  # g.gameEngine.menuLogin.password
 
-        #    g.tcpConn.sendLogin(username, password)
-
-        # log("Connection established to server")
+            g.tcpConn.sendLogin(username, password)
+        log("Connection established to server")
 
     def lineReceived(self, data):
         global dataHandler
 
         # handle base64 data
+        # decodedData = base64.b64decode(data)
         decodedData = str(data)
+
         # log("Received data from server")
         # log(" -> " + decodedData)
 
@@ -49,7 +55,8 @@ class gameClientProtocol(LineReceiver):
 
     def sendData(self, data):
         # encode data using base64
-        encodedData = bytearray(data, "utf-8")
+        # encodedData = base64.b64encode(data)
+        encodedData = bytes(data, "utf-8")
         self.sendLine(encodedData)
 
 
@@ -59,7 +66,7 @@ class gameClientFactory(ClientFactory):
 
     def startedConnecting(self, connector):
 
-        print("Connecting to server...")
+        log("Connecting to server...")
 
     def buildProtocol(self, addr):
         return self.protocol
@@ -67,12 +74,31 @@ class gameClientFactory(ClientFactory):
     def clientConnectionFailed(self, connector, reason):
         # errorMsg = reason.getErrorMessage().split(':')
         # alertMessageDialog('Unable to connect to server: ' + errorMsg[1] + errorMsg[2], 'An error occured')
-        print(reason.getErrorMessage())
+        log(reason.getErrorMessage())
 
     def clientConnectionLost(self, connector, reason):
-        print(reason.getErrorMessage())
+        log(reason.getErrorMessage())
         try:
-            ##reactor.stop()
-            print("Disconnection from server")
+            # reactor.stop()
+            log("Disconnection from server")
         except error.ReactorNotRunning:
             pass
+
+
+class TCPConnection:
+    def __init__(self, protocol):
+        self.protocol = protocol
+
+    def sendData(self, data):
+        self.protocol.sendData(data)
+
+    def sendLogin(self, username, password):
+        packet = json.dumps(
+            [{"packet": ClientPackets.CLogin, "name": username, "password": password}],
+            ensure_ascii=False,
+        )
+        self.sendData(packet)
+
+    def sendQuit(self):
+        packet = json.dumps([{"packet": ClientPackets.CQuit}])
+        self.sendData(packet)

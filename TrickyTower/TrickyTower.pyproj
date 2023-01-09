@@ -24,9 +24,12 @@
   <ItemGroup>
     <Compile Include="src\constants.py" />
     <Compile Include="src\datahandler.py" />
+    <Compile Include="src\engine.py" />
+    <Compile Include="src\global_vars.py" />
     <Compile Include="src\network.py" />
     <Compile Include="src\packettypes.py" />
     <Compile Include="src\TrickyTower.py" />
+    <Compile Include="src\utils.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.11" />
