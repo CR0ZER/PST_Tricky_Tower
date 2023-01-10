@@ -16,3 +16,7 @@ inpDIR_LEFT = False
 inpDIR_RIGHT = False
 inpSHIFT = False
 inpCTRL = False
+
+# pygame
+height = 1600
+width = 900
