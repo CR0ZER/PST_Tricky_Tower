@@ -1,5 +1,11 @@
 import time
+import os.path as path
 import pygame
+import pymunk
+import pymunk.pygame_util
+from pymunk.pygame_util import from_pygame, to_pygame
+import pymunk.autogeometry
+import pygame_menu
 from pygame.locals import *
 
 from twisted.internet import reactor
@@ -20,12 +26,55 @@ class Engine:
         self.walkTimer = 0
         self.clockTick = 0
 
+        self.draw_options = None
+        self.screen = None
+        self.clock = None
+        self.space = None
+        self.nbPlayer = 1
+        self.shape = None
+
     def init(self):
 
         # self.initConfig(g.dataPath + '/config.cfg')
         g.gameEngine.initConnection()
 
-        self.gameLoop()
+        # pygame init
+        pygame.init()
+        self.screen = pygame.display.set_mode((g.height, g.width))
+        self.clock = pygame.time.Clock()
+
+        # pygame physics
+        self.space = pymunk.Space()
+        self.mass = 1
+        self.size = (50, 50)
+        self.moment = pymunk.moment_for_box(self.mass, self.size)
+        self.body = pymunk.Body(self.mass, self.moment)
+        self.shape = pymunk.Poly.create_box(self.body, self.size)
+        self.space.add(self.body, self.shape)
+        self.force = pymunk.Vec2d(0,30)
+
+        # pygame plateforme
+        def static_rect(space, x, y, r_width, r_height):
+            body = pymunk.Body(body_type=pymunk.Body.STATIC)
+            body.position = x, y
+            shape = pymunk.Poly.create_box(body, (r_width, r_height))
+            space.add(body, shape)
+        
+        static_rect(self.space, 600, 900, 200, 400)
+        static_rect(self.space, 1000, 900, 200, 400)
+
+        # pygame menu
+        theme_background_image = pygame_menu.themes.THEME_DARK.copy()
+        theme_background_image.background_color = pygame_menu.BaseImage(image_path="assets/background_menu.png")
+
+        menu1 = pygame_menu.Menu('Tricky Tower', g.height, g.width, theme=theme_background_image)
+        menu1.add.vertical_margin(200)
+        menu1.add.button('Jouer', action=self.gameLoop, font_color=(255, 255, 255))
+        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255))
+
+
+        menu1.mainloop(self.screen)
+        #self.gameLoop()
         reactor.run()
 
     def initConnection(self):
@@ -81,6 +130,20 @@ class Engine:
             pygame.display.update()
             # pygame.display.update(self.graphicsEngine.dirtyRects)
 
+        
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                self.quitGame()
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.quitGame()
+        
+        self.space.step(1/50.0)
+        self.screen.fill(pygame.Color("white"))
+        pygame.draw.rect(self.screen, (0, 0, 0), to_pygame(self.shape, self.screen))
+
+        pygame.display.flip()
+        self.clock.tick(self.FRAMES_PER_SECOND)
+        
         # pygame.event.pump()
         # for event in pygame.event.get():
         #    # todo: organize this better...
