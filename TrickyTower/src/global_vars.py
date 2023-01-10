@@ -1,12 +1,13 @@
 
 # connection
 gameEngine = None
-soundEngine = None
 
 tcpConn = None
 connector = None
 
 gameState = 0
+
+Blocks = []
 
 # input
 inpDIR_UP = False

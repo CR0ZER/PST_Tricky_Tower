@@ -45,7 +45,7 @@ class gameClientProtocol(LineReceiver):
         global dataHandler
 
         log("Received data from server")
-        log(" -> " + data)
+        log(" -> " + str(data))
 
         dataHandler.handleData(data)
 

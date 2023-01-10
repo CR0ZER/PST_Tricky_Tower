@@ -4,4 +4,4 @@ class ClientPackets:
 
 
 class ServerPackets:
-    (SLoginOK) = range(1)
+    SLoginOK, SSendBlock = range(2)

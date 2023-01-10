@@ -19,5 +19,4 @@ conn = None
 serverLogger = None
 connectionLogger = None
 
-Player = []
-TempPlayer = []
+# physics

@@ -60,6 +60,9 @@ class Engine:
     def gameLoop(self, FPS=25):
         """the main loop of the game"""
         # TODO: DIRTY AREAS
+        for b in g.Blocks:
+            # log("position" + str(b[0].x))
+            pass
         if g.gameState == MENU_LOGIN:
             pass
 

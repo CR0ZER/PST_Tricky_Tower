@@ -1,4 +1,23 @@
 from constants import *
+import pymunk
+
+space = pymunk.Space()
+space.gravity = 0, -981
+
+
+class Board():
+    def __init__(self):
+        self.playerPosition = 0
+        self.dropSpeed = 10
+
+    def createBox(self):
+        body = pymunk.Body()        # Create a Body
+        body.position = 50, 100      # Set the position of the body
+
+        # Create a box shape and attach to body
+        poly = pymunk.Poly.create_box(body)
+        poly.mass = 10              # Set the mass on the shape
+        space.add(body, poly)            # Set the mass on the shape
 
 
 class AccountClass():

@@ -1,7 +1,7 @@
 import time
 import logging
 import logging.handlers
-import base64
+import pymunk
 
 # twisted
 from twisted.internet.protocol import Factory
@@ -11,6 +11,7 @@ from twisted.protocols.basic import LineReceiver
 from gamelogic import *
 from datahandler import *
 import global_vars as g
+from objects import *
 
 dataHandler = None
 
@@ -43,6 +44,8 @@ def startServer():
         "Initialization complete. Server loaded in " + str(round(totalTime, 2)) + " ms.")
 
     # start the server loop and the reactor
+    board = Board()
+    board.createBox()
     serverLoop()
     reactor.run()
 
@@ -149,12 +152,18 @@ lastUpdatePlayerVitals = 0
 lastUpdateMapSpawnItems = 0
 lastUpdateSavePlayers = 0
 lastRegenNpcHp = 0
+print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
+print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
 
 
 def serverLoop():
     global clockTick, tmr500, tmr1000, lastUpdatePlayerVitals, lastUpdateSavePlayers, lastUpdateMapSpawnItems
 
     clockTick = time.time() * 1000
+
+    space.step(0.02)        # Step the simulation one step forward
+    # space.debug_draw(print_options)
+    sendBlock()
 
     if clockTick > tmr1000:
         # handle shutting down server
@@ -164,4 +173,4 @@ def serverLoop():
         tmr1000 = time.time() * 1000 + 1000
 
     # loop the serverLoop function every half second
-    reactor.callLater(0.5, serverLoop)
+    reactor.callLater(0.02, serverLoop)
