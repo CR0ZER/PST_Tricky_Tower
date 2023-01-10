@@ -2,7 +2,7 @@ from constants import *
 import pymunk
 
 space = pymunk.Space()
-space.gravity = 0, -981
+space.gravity = 0, 98
 
 
 class Board():
@@ -12,7 +12,7 @@ class Board():
 
     def createBox(self):
         body = pymunk.Body()        # Create a Body
-        body.position = 50, 100      # Set the position of the body
+        body.position = 500, 500      # Set the position of the body
 
         # Create a box shape and attach to body
         poly = pymunk.Poly.create_box(body)

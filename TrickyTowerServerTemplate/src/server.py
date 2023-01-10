@@ -1,8 +1,10 @@
+import pygame
 import time
 import logging
 import logging.handlers
 import pymunk
 
+import pymunk.pygame_util
 # twisted
 from twisted.internet.protocol import Factory
 from twisted.internet import reactor
@@ -152,8 +154,12 @@ lastUpdatePlayerVitals = 0
 lastUpdateMapSpawnItems = 0
 lastUpdateSavePlayers = 0
 lastRegenNpcHp = 0
-print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
-print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
+
+pygame.init()
+screen = pygame.display.set_mode((1080, 720))
+print_options = pymunk.pygame_util.DrawOptions(screen)
+# print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
+# print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
 
 
 def serverLoop():
@@ -162,7 +168,10 @@ def serverLoop():
     clockTick = time.time() * 1000
 
     space.step(0.02)        # Step the simulation one step forward
-    # space.debug_draw(print_options)
+    screen.fill(pygame.Color("black"))
+    space.debug_draw(print_options)
+    pygame.display.flip()
+
     sendBlock()
 
     if clockTick > tmr1000:

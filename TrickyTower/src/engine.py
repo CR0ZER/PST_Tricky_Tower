@@ -1,3 +1,4 @@
+from pickle import TRUE
 import time
 import os.path as path
 import pygame
@@ -32,6 +33,7 @@ class Engine:
         self.space = None
         self.nbPlayer = 1
         self.shape = None
+        self.menu = None
 
     def init(self):
 
@@ -51,7 +53,7 @@ class Engine:
         self.body = pymunk.Body(self.mass, self.moment)
         self.shape = pymunk.Poly.create_box(self.body, self.size)
         self.space.add(self.body, self.shape)
-        self.force = pymunk.Vec2d(0,30)
+        self.force = pymunk.Vec2d(0, 30)
 
         # pygame plateforme
         def static_rect(space, x, y, r_width, r_height):
@@ -59,22 +61,25 @@ class Engine:
             body.position = x, y
             shape = pymunk.Poly.create_box(body, (r_width, r_height))
             space.add(body, shape)
-        
+
         static_rect(self.space, 600, 900, 200, 400)
         static_rect(self.space, 1000, 900, 200, 400)
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        theme_background_image.background_color = pygame_menu.BaseImage(image_path="assets/background_menu.png")
+        theme_background_image.background_color = pygame_menu.BaseImage(
+            image_path="src/assets/background_menu.png")
 
-        menu1 = pygame_menu.Menu('Tricky Tower', g.height, g.width, theme=theme_background_image)
+        menu1 = pygame_menu.Menu(
+            'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-        menu1.add.button('Jouer', action=self.gameLoop, font_color=(255, 255, 255))
-        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255))
+        menu1.add.button('Jouer', action=self.gameLoop,
+                         font_color=(255, 255, 255))
+        menu1.add.button('Quitter', pygame_menu.events.EXIT,
+                         font_color=(255, 255, 255))
+        self.menu = menu1
 
-
-        menu1.mainloop(self.screen)
-        #self.gameLoop()
+        self.gameLoop()
         reactor.run()
 
     def initConnection(self):
@@ -110,10 +115,12 @@ class Engine:
         """the main loop of the game"""
         # TODO: DIRTY AREAS
         for b in g.Blocks:
-            # log("position" + str(b[0].x))
-            pass
+            log("position" + str(b[1].x))
+            # TODO créer uns structure pour les rectangles reçu
+            #  b[0].x et b[0].y position physique du carré
+            #  b[1].x et b[1].y vecteur rotation du carré
         if g.gameState == MENU_LOGIN:
-            pass
+            self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
             pass
@@ -133,20 +140,19 @@ class Engine:
             pygame.display.update()
             # pygame.display.update(self.graphicsEngine.dirtyRects)
 
-        
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.quitGame()
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 self.quitGame()
-        
+
         self.space.step(1/50.0)
         self.screen.fill(pygame.Color("white"))
-        pygame.draw.rect(self.screen, (0, 0, 0), to_pygame(self.shape, self.screen))
+        # pygame.draw.rect(self.screen, (0, 0, 0), (1, 1))
 
         pygame.display.flip()
         self.clock.tick(self.FRAMES_PER_SECOND)
-        
+
         # pygame.event.pump()
         # for event in pygame.event.get():
         #    # todo: organize this better...

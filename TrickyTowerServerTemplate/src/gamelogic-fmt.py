@@ -120,4 +120,5 @@ def sendBlock():
         packet = json.dumps([{"packet": ServerPackets.SSendBlock, "ID": b._id_counter,
                              "positionX": b._get_position().x, "positionY": b._get_position().y, "rotationX": b._get_rotation_vector().x, "rotationY": b._get_rotation_vector().y}])
         g.conn.sendDataToAll(packet)
-    # log("= = = = = = = = = = =")
+
+    log("= = = = = = = = = = =")
