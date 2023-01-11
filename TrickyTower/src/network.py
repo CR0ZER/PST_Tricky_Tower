@@ -44,8 +44,8 @@ class gameClientProtocol(LineReceiver):
     def lineReceived(self, data):
         global dataHandler
 
-        log("Received data from server")
-        log(" -> " + str(data))
+        # log("Received data from server")
+        # log(" -> " + str(data))
 
         dataHandler.handleData(data)
 

@@ -24,12 +24,13 @@ class DataHandler:
 
         else:
             # Packet is unknown - hacking attempt
-            log("potential hacking attempt")
+            # log("potential hacking attempt")
+            pass
 
     def handleBlock(self, jsonData):
         g.Blocks.append((Vec2d(jsonData[0]["positionX"], jsonData[0]["positionY"]), Vec2d(
             jsonData[0]["rotationX"], jsonData[0]["rotationY"])))
-        log("position" + str(jsonData[0]["positionY"]))
+        # log("position" + str(jsonData[0]["positionY"]))
 
     def handleAlertMsg(self, jsonData):
         msg = jsonData[0]["msg"]

@@ -18,7 +18,7 @@ import global_vars as g
 
 class Engine:
     def __init__(self):
-        self.FRAMES_PER_SECOND = 20
+        self.FRAMES_PER_SECOND = 50
 
         # menus
 
@@ -37,11 +37,13 @@ class Engine:
 
     def changeState(self):
         g.gameState = 1
-    
+        g.gameEngine.initConnection()
+        time.sleep(2)
+        log("boom")
+
     def init(self):
 
         # self.initConfig(g.dataPath + '/config.cfg')
-        g.gameEngine.initConnection()
 
         # pygame init
         pygame.init()
@@ -70,14 +72,17 @@ class Engine:
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        #theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
-        theme_background_image.background_color = pygame_menu.BaseImage(image_path="./assets/background_menu.png")
+        # theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
+        theme_background_image.background_color = pygame_menu.BaseImage(
+            image_path="./src/assets/background_menu.png")
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-        menu1.add.button('Jouer', action=self.changeState, font_color=(255, 255, 255))
-        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255))
+        menu1.add.button('Jouer', action=self.changeState,
+                         font_color=(255, 255, 255))
+        menu1.add.button('Quitter', pygame_menu.events.EXIT,
+                         font_color=(255, 255, 255))
         self.menu = menu1
 
         self.gameLoop()
@@ -112,7 +117,6 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-
     class Sprite(pygame.sprite.Sprite):
         def __init__(self, x, y, size):
             super().__init__()
@@ -123,26 +127,28 @@ class Engine:
             self.rect.x = x
             self.rect.y = y
 
-
-    def gameLoop(self, FPS=60):
+    def gameLoop(self, FPS=50):
+        global clockTick
+        clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
-
+        posX = 0
+        posY = 0
         for b in g.Blocks:
-            log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
-            self.posX = b[0].x
-            self.posY = b[0].y - 1000
-            log(f"position : " + str(self.posX) + " ; " + str(self.posY))
+            # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
+            posX = b[0].x
+            posY = b[0].y
+            # log(f"position : " + str(self.posX) + " ; " + str(self.posY))
             # TODO cr�er uns structure pour les rectangles re�u
             #  b[0].x et b[0].y position physique du carr�
             #  b[1].x et b[1].y vecteur rotation du carr�
-        
+
         if g.gameState == MENU_LOGIN:
             self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
             self.screen.fill(pygame.Color("white"))
-            self.sprite = self.Sprite(self.posX, self.posY, 50)
+            self.sprite = self.Sprite(posX, posY, 50)
             self.sprite_group = pygame.sprite.Group()
             self.sprite_group.add(self.sprite)
             self.sprite_group.draw(self.screen)
@@ -170,7 +176,7 @@ class Engine:
                 self.quitGame()
 
         self.space.step(1/50.0)
-        
+
         # pygame.draw.rect(self.screen, (0, 0, 0), (1, 1))
 
         pygame.display.flip()
@@ -201,7 +207,12 @@ class Engine:
         #        self.handleMouse(event)
 
         # make it loop
-        reactor.callLater(1.0 / FPS, self.gameLoop)
+        t = time.time() - clockTick
+        # log("tts :" + str(t))
+        if (t > 0.02):
+            reactor.callLater(0.001, self.gameLoop)
+        else:
+            reactor.callLater(0.02 - t, self.gameLoop)
 
     def quitGame(self):
         """called when quitting the game"""

@@ -171,10 +171,15 @@ def serverLoop():
     screen.fill(pygame.Color("black"))
     g.game.space.debug_draw(print_options)
     pygame.display.flip()
+    for event in pygame.event.get():
+        pass
 
     sendBlock()  # Envoie tout les blocks aux clients
 
     g.game.space.step(0.02)
     t = time.time() - clockTick
-    # log("tts :" + str(t))
-    reactor.callLater(0.02 - t, serverLoop)
+    log("tts :" + str(t))
+    if (t > 0.02):
+        reactor.callLater(0.001, serverLoop)
+    else:
+        reactor.callLater(0.02 - t, serverLoop)
