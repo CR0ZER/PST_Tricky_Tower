@@ -74,7 +74,7 @@ class Engine:
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
         # theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
         theme_background_image.background_color = pygame_menu.BaseImage(
-            image_path="./src/assets/background_menu.png")
+            image_path=g.background)
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)

@@ -178,7 +178,7 @@ def serverLoop():
 
     g.game.space.step(0.02)
     t = time.time() - clockTick
-    log("tts :" + str(t))
+    #log("tts :" + str(t))
     if (t > 0.02):
         reactor.callLater(0.001, serverLoop)
     else:
