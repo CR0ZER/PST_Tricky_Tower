@@ -14,6 +14,8 @@ maxClasses = 0
 # Protocol
 conn = None
 
+game = None
+
 
 # loggers
 serverLogger = None

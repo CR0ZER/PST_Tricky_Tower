@@ -46,8 +46,9 @@ def startServer():
         "Initialization complete. Server loaded in " + str(round(totalTime, 2)) + " ms.")
 
     # start the server loop and the reactor
-    board = Board()
-    board.createBox()
+    g.game = Game()
+    g.game.lauch()
+
     serverLoop()
     reactor.run()
 
@@ -148,12 +149,6 @@ class gameServerFactory(Factory):
 
 # server loop and timings
 clockTick = 0
-tmr500 = 0
-tmr1000 = 0
-lastUpdatePlayerVitals = 0
-lastUpdateMapSpawnItems = 0
-lastUpdateSavePlayers = 0
-lastRegenNpcHp = 0
 
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
@@ -163,23 +158,23 @@ print_options = pymunk.pygame_util.DrawOptions(screen)
 
 
 def serverLoop():
-    global clockTick, tmr500, tmr1000, lastUpdatePlayerVitals, lastUpdateSavePlayers, lastUpdateMapSpawnItems
 
-    clockTick = time.time() * 1000
+    global clockTick
+    clockTick = time.time()
 
-    space.step(0.02)        # Step the simulation one step forward
+    for b in g.game.space.bodies:
+        if (b.position.y < 0):
+            g.game.space.remove()
+            g.game.space.remove(g.game.body, g.game.poly)
+            g.game.lauch()
+    # Step the simulation one step forward
     screen.fill(pygame.Color("black"))
-    space.debug_draw(print_options)
+    g.game.space.debug_draw(print_options)
     pygame.display.flip()
 
-    sendBlock()
+    sendBlock()  # Envoie tout les blocks aux clients
 
-    if clockTick > tmr1000:
-        # handle shutting down server
-
-        # handle closing doors
-
-        tmr1000 = time.time() * 1000 + 1000
-
-    # loop the serverLoop function every half second
-    reactor.callLater(0.02, serverLoop)
+    g.game.space.step(0.02)
+    t = time.time() - clockTick
+    # log("tts :" + str(t))
+    reactor.callLater(0.02 - t, serverLoop)
