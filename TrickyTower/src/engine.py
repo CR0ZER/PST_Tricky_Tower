@@ -74,15 +74,15 @@ class Engine:
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
         # theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
         theme_background_image.background_color = pygame_menu.BaseImage(
-            image_path="./src/assets/background_menu.png")
+            image_path=g.background)
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-        menu1.add.button('Jouer', action=self.changeState,
-                         font_color=(255, 255, 255))
-        menu1.add.button('Quitter', pygame_menu.events.EXIT,
-                         font_color=(255, 255, 255))
+    
+        menu1.add.button('Jouer', action=self.changeState, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+        menu1.add.button('The useless button', action=None, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
         self.menu = menu1
 
         self.gameLoop()
@@ -147,8 +147,8 @@ class Engine:
             self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
-            self.screen.fill(pygame.Color("white"))
-            self.sprite = self.Sprite(posX, posY, 10)
+            self.screen.blit(self.background, (0, 0))
+            self.sprite = self.Sprite(self.posX, self.posY, 50)
             self.sprite_group = pygame.sprite.Group()
             self.sprite_group.add(self.sprite)
             self.sprite_group.draw(self.screen)

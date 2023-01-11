@@ -177,7 +177,7 @@ def serverLoop():
     sendBlock()  # Envoie tout les blocks aux clients
 
     t = time.time() - clockTick
-    log("tts :" + str(t))
+    #log("tts :" + str(t))
     if (t > 0.02):
         reactor.callLater(0.001, serverLoop)
     else:
