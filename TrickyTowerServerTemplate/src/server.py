@@ -47,7 +47,7 @@ def startServer():
 
     # start the server loop and the reactor
     g.game = Game()
-    g.game.lauch()
+    g.game.launch()
 
     serverLoop()
     reactor.run()
@@ -162,21 +162,20 @@ def serverLoop():
     global clockTick
     clockTick = time.time()
 
-    for b in g.game.space.bodies:
-        if (b.position.y < 0):
-            g.game.space.remove()
-            g.game.space.remove(g.game.body, g.game.poly)
-            g.game.lauch()
-    # Step the simulation one step forward
+    g.game.space.step(0.02)
+    g.game.removeFalledBlocks()
+
     screen.fill(pygame.Color("black"))
     g.game.space.debug_draw(print_options)
     pygame.display.flip()
     for event in pygame.event.get():
-        pass
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                for i in range(4):
+                    g.game.createRamdomBlock(i)
 
     sendBlock()  # Envoie tout les blocks aux clients
 
-    g.game.space.step(0.02)
     t = time.time() - clockTick
     log("tts :" + str(t))
     if (t > 0.02):

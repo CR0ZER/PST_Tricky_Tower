@@ -148,7 +148,7 @@ class Engine:
 
         elif g.gameState == MENU_REGISTER:
             self.screen.fill(pygame.Color("white"))
-            self.sprite = self.Sprite(posX, posY, 50)
+            self.sprite = self.Sprite(posX, posY, 10)
             self.sprite_group = pygame.sprite.Group()
             self.sprite_group.add(self.sprite)
             self.sprite_group.draw(self.screen)

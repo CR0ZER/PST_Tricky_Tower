@@ -12,6 +12,11 @@ GAME_PORT = 2727      # the game port
 MAX_PLAYERS = 4
 
 
+MASS_MULTIPLIER = 10.0
+BLOCK_FRICTION = 0.6
+PLATE_FRICTION = 1.0
+
+
 class textColor():
     BLACK = (0,   0,   0)
     WHITE = (255, 255, 255)
