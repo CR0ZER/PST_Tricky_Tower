@@ -5,7 +5,7 @@ gameEngine = None
 tcpConn = None
 connector = None
 
-gameState = 1
+gameState = 0
 
 Blocks = []
 

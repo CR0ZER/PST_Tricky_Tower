@@ -155,9 +155,9 @@ lastUpdateMapSpawnItems = 0
 lastUpdateSavePlayers = 0
 lastRegenNpcHp = 0
 
-pygame.init()
+"""pygame.init()
 screen = pygame.display.set_mode((1080, 720))
-print_options = pymunk.pygame_util.DrawOptions(screen)
+print_options = pymunk.pygame_util.DrawOptions(screen)"""
 # print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
 # print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
 
@@ -168,9 +168,9 @@ def serverLoop():
     clockTick = time.time() * 1000
 
     space.step(0.02)        # Step the simulation one step forward
-    screen.fill(pygame.Color("black"))
+    """screen.fill(pygame.Color("black"))
     space.debug_draw(print_options)
-    pygame.display.flip()
+    pygame.display.flip()"""
 
     sendBlock()
 

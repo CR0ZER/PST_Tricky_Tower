@@ -1,4 +1,3 @@
-from turtle import Vec2D
 from constants import *
 import global_vars as g
 from packettypes import *

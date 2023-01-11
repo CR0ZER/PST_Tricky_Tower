@@ -35,6 +35,9 @@ class Engine:
         self.shape = None
         self.menu = None
 
+    def changeState(self):
+        g.gameState = 1
+    
     def init(self):
 
         # self.initConfig(g.dataPath + '/config.cfg')
@@ -67,16 +70,14 @@ class Engine:
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        theme_background_image.background_color = pygame_menu.BaseImage(
-            image_path="src/assets/background_menu.png")
+        #theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
+        theme_background_image.background_color = pygame_menu.BaseImage(image_path="./assets/background_menu.png")
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-        menu1.add.button('Jouer', action=self.gameLoop,
-                         font_color=(255, 255, 255))
-        menu1.add.button('Quitter', pygame_menu.events.EXIT,
-                         font_color=(255, 255, 255))
+        menu1.add.button('Jouer', action=self.changeState, font_color=(255, 255, 255))
+        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255))
         self.menu = menu1
 
         self.gameLoop()
@@ -111,19 +112,41 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-    def gameLoop(self, FPS=25):
+
+    class Sprite(pygame.sprite.Sprite):
+        def __init__(self, x, y, size):
+            super().__init__()
+
+            self.image = pygame.Surface([size, size])
+            self.image.fill((255, 0, 0))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+
+
+    def gameLoop(self, FPS=60):
         """the main loop of the game"""
         # TODO: DIRTY AREAS
+
         for b in g.Blocks:
-            log("position" + str(b[1].x))
-            # TODO créer uns structure pour les rectangles reçu
-            #  b[0].x et b[0].y position physique du carré
-            #  b[1].x et b[1].y vecteur rotation du carré
+            log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
+            self.posX = b[0].x
+            self.posY = b[0].y - 1000
+            log(f"position : " + str(self.posX) + " ; " + str(self.posY))
+            # TODO crï¿½er uns structure pour les rectangles reï¿½u
+            #  b[0].x et b[0].y position physique du carrï¿½
+            #  b[1].x et b[1].y vecteur rotation du carrï¿½
+        
         if g.gameState == MENU_LOGIN:
             self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
-            pass
+            self.screen.fill(pygame.Color("white"))
+            self.sprite = self.Sprite(self.posX, self.posY, 50)
+            self.sprite_group = pygame.sprite.Group()
+            self.sprite_group.add(self.sprite)
+            self.sprite_group.draw(self.screen)
+            pygame.display.update()
 
         elif g.gameState == MENU_CHAR:
             pass
@@ -147,7 +170,7 @@ class Engine:
                 self.quitGame()
 
         self.space.step(1/50.0)
-        self.screen.fill(pygame.Color("white"))
+        
         # pygame.draw.rect(self.screen, (0, 0, 0), (1, 1))
 
         pygame.display.flip()
