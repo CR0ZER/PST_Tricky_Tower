@@ -72,9 +72,7 @@ class Engine:
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        # theme_background_image.background_color = pygame_menu.BaseImage(image_path="src/assets/background_menu.png")
-        theme_background_image.background_color = pygame_menu.BaseImage(
-            image_path=g.background)
+        theme_background_image.background_color = pygame_menu.BaseImage(image_path=g.background_menu)
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -147,8 +145,9 @@ class Engine:
             self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
-            self.screen.blit(self.background, (0, 0))
-            self.sprite = self.Sprite(self.posX, self.posY, 50)
+            self.screen.blit(pygame.image.load(g.background_game), (0, 0), )
+            self.sprite = self.Sprite(posX, posY, 20)
+            #self.sprite.blit(pygame.image.load("./src/assets/Game_Assets/R/R.png"), (0,0))
             self.sprite_group = pygame.sprite.Group()
             self.sprite_group.add(self.sprite)
             self.sprite_group.draw(self.screen)
@@ -171,9 +170,9 @@ class Engine:
 
         for event in pygame.event.get():
             if event.type == QUIT:
-                self.quitGame()
+                g.gameState = 0
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                self.quitGame()
+                g.gameState = 0
 
         self.space.step(1/50.0)
 
