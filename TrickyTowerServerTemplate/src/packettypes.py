@@ -1,7 +1,7 @@
 
 class ClientPackets:
-    CLogin, CQuit = range(2)
+    CLogin, CQuit, CLaunch = range(3)
 
 
 class ServerPackets:
-    SLoginOK, SSendBlock = range(2)
+    SLoginOK, SSendBlock, SBeginBlock, SEndBlock, SPlayerCount = range(5)
