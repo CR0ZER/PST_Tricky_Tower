@@ -159,8 +159,7 @@ print_options = pymunk.pygame_util.DrawOptions(screen)
 
 def serverLoop():
 
-    global clockTick
-    clockTick = time.time()
+    g.clockTime = time.time()
 
     g.game.space.step(0.02)
     g.game.removeFalledBlocks()
@@ -176,8 +175,8 @@ def serverLoop():
 
     sendBlock()  # Envoie tout les blocks aux clients
 
-    t = time.time() - clockTick
-    #log("tts :" + str(t))
+    t = time.time() - g.clockTime
+    # log("tts :" + str(t))
     if (t > 0.02):
         reactor.callLater(0.001, serverLoop)
     else:

@@ -75,7 +75,8 @@ class Engine:
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        theme_background_image.background_color = pygame_menu.BaseImage(image_path=g.background_menu)
+        theme_background_image.background_color = pygame_menu.BaseImage(
+            image_path=g.background_menu)
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -142,6 +143,8 @@ class Engine:
         self.sprite_group = pygame.sprite.Group()
              
 
+        posX = 0
+        posY = 0
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x

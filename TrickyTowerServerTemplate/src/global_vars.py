@@ -17,6 +17,8 @@ conn = None
 game = None
 
 
+clockTime = 0
+
 # loggers
 serverLogger = None
 connectionLogger = None

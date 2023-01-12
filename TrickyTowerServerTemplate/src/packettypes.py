@@ -1,6 +1,6 @@
 
 class ClientPackets:
-    CLogin, CQuit, CLaunch = range(3)
+    CLogin, CQuit, CLaunch, CArrowKey = range(4)
 
 
 class ServerPackets:
