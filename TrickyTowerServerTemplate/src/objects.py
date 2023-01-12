@@ -11,10 +11,12 @@ from pymunk.vec2d import *
 
 class Player():
     def __init__(self):
-        self.key = 0
+        self.key = []
         self.state = 0
         self.dropSpeed = 10
         self.block = None
+        for i in range(5):
+            self.key.append(False)
 
 
 class Block():
@@ -54,18 +56,17 @@ class Game():
     def playerInput(self, index):
         p = self.players[index]
 
-        if p.key != 0:
-            if p.key == 1:
-                p.key = 0
-            elif p.key == 2:
-                p.block.body.position -= Vec2d(5, 0)
-                p.key = 0
-            elif p.key == 3:
-                p.dropSpeed = BOOST_DROP_SPEED
-                p.key = 0
-            elif p.key == 4:
-                p.block.body.position += Vec2d(5, 0)
-                p.key = 0
+        if p.key[DIR_UP] == True:  # rotate
+            p.key[DIR_UP] = False
+
+        if p.key[DIR_LEFT] == True:  # move left
+            p.block.body.position -= Vec2d(5, 0)
+
+        if p.key[DIR_DOWN] == True:  # speed up descent
+            p.dropSpeed = BOOST_DROP_SPEED
+
+        if p.key[DIR_RIGHT] == True:  # move right
+            p.block.body.position += Vec2d(5, 0)
 
     def checkPlayerCollide(self, index):
         p = self.players[index]

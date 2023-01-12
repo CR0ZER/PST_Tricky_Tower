@@ -53,4 +53,4 @@ class DataHandler():
         closeConnection(index)
 
     def handleKey(self, index, jsonData):
-        g.game.players[index].key = jsonData[0]["key"]
+        g.game.players[index].key[jsonData[0]["key"]] = jsonData[0]["actived"]
