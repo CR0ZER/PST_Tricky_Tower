@@ -123,22 +123,65 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-    class Surface(pygame.sprite.Sprite):
-        def __init__(self, x, y, type):
-            super().__init__()
-            self.image = None
-            if type == 1:
-                # self.image = pygame.Surface((10, 40))
-                self.image.fill((255, 0, 0))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-
     class TShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = pygame.Surface((3, 3))
             self.image = pygame.image.load(g.Tshape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+
+    class LShape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.Lshape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+
+    class L2Shape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.L2shape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+
+    class RShape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.Rshape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+
+    class SShape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.Sshape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+    
+    class S2Shape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.S2shape).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.rect = self.image.get_rect()
+            self.rect.center = (x, y)
+
+    class IShape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((3, 3))
+            self.image = pygame.image.load(g.Ishape).convert_alpha()
             self.image = pygame.transform.scale(self.image, (60, 60))
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
@@ -171,17 +214,40 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
-            """bloc = self.Surface(posX, posY, type)
-            if bloc.image is not None:
-                bloc.image = pygame.transform.rotate(bloc.image, angle_deg)
-                self.sprite_group.add(bloc)
-                print(len(self.sprite_group))"""
+            
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
                 self.sprite_group.add(plateform)
 
-            # elif type == 1:
-            #    self.screen.blit(pygame.transform.rotate(pygame.image.load(g.IShape).convert_alpha(), angle_deg), (posX, posY))
+            elif type == 1:
+                shape = self.IShape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
+            elif type == 2:
+                shape = self.RShape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
+            elif type == 3:
+                shape = self.SShape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
+            elif type == 4:
+                shape = self.S2Shape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
+            elif type == 5:
+                shape = self.LShape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
+            elif type == 6:
+                shape = self.L2Shape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
 
             elif type == 7:
                 shape = self.TShape(posX, posY)
