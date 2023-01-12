@@ -230,19 +230,37 @@ class Engine:
                     g.gameState = 0
                 elif event.key == pygame.K_z or event.key == K_UP:
                     packet = json.dumps(
-                        [{"packet": ClientPackets.CArrowKey, "key": 1}])
+                        [{"packet": ClientPackets.CArrowKey, "key": 1, "actived" : True}])
                     g.tcpConn.sendData(packet)
                 elif event.key == pygame.K_q or event.key == K_LEFT:
                     packet = json.dumps(
-                        [{"packet": ClientPackets.CArrowKey, "key": 2}])
+                        [{"packet": ClientPackets.CArrowKey, "key": 2, "actived" : True}])
                     g.tcpConn.sendData(packet)
                 elif event.key == pygame.K_s or event.key == K_DOWN:
                     packet = json.dumps(
-                        [{"packet": ClientPackets.CArrowKey, "key": 3}])
+                        [{"packet": ClientPackets.CArrowKey, "key": 3, "actived" : True}])
                     g.tcpConn.sendData(packet)
                 elif event.key == pygame.K_d or event.key == K_RIGHT:
                     packet = json.dumps(
-                        [{"packet": ClientPackets.CArrowKey, "key": 4}])
+                        [{"packet": ClientPackets.CArrowKey, "key": 4, "actived" : True}])
+                    g.tcpConn.sendData(packet)
+
+            if event.type != pygame.KEYDOWN:
+                if event.key == pygame.K_z or event.key == K_UP:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 1, "actived" : False}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_q or event.key == K_LEFT:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 2, "actived" : False}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_s or event.key == K_DOWN:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 3, "actived" : False}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_d or event.key == K_RIGHT:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 4, "actived" : False}])
                     g.tcpConn.sendData(packet)
 
         self.space.step(1/50.0)
