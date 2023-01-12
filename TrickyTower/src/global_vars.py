@@ -20,4 +20,5 @@ inpCTRL = False
 # pygame
 height = 1600
 width = 900
-background = "./src/assets/background_menu.png"
+background_menu = "./src/assets/background_menu.png"
+background_game = "./src/assets/background_game.png"
