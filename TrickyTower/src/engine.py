@@ -34,6 +34,7 @@ class Engine:
         self.nbPlayer = 1
         self.shape = None
         self.menu = None
+        self.background = None
 
     def changeState(self):
         g.gameState = 1
@@ -59,6 +60,7 @@ class Engine:
         self.shape = pymunk.Poly.create_box(self.body, self.size)
         self.space.add(self.body, self.shape)
         self.force = pymunk.Vec2d(0, 30)
+        self.background = pygame.Surface((g.width, g.height))
 
         # pygame plateforme
         def static_rect(space, x, y, r_width, r_height):
@@ -79,10 +81,13 @@ class Engine:
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-    
-        menu1.add.button('Jouer', action=self.changeState, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
-        menu1.add.button('The useless button', action=None, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
-        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+
+        menu1.add.button('Jouer', action=self.changeState, font_color=(
+            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+        menu1.add.button('The useless button', action=None, font_color=(
+            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+        menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(
+            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
         self.menu = menu1
 
         self.gameLoop()
@@ -132,8 +137,8 @@ class Engine:
         clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
-        posX = 0
-        posY = 0
+        self.posX = 0
+        self.posY = 0
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x
