@@ -128,7 +128,7 @@ class Engine:
             super().__init__()
             self.image = None
             if type == 1:
-                #self.image = pygame.Surface((10, 40))
+                # self.image = pygame.Surface((10, 40))
                 self.image.fill((255, 0, 0))
                 self.rect = self.image.get_rect()
                 self.rect.x = x
@@ -137,18 +137,22 @@ class Engine:
     class TShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.size = 10
-            self.image = pygame.Surface((self.size*3, self.size*2))
-            self.image.fill((255, 0, 0))
+            self.size = 1
+            self.image = pygame.Surface((self.size*3, self.size*3))
+            self.image = pygame.image.load(g.Tshape).convert_alpha()
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
 
             self.block_list = []
-            self.block_list.append(pygame.Rect(self.size, 0, self.size, self.size))
-            self.block_list.append(pygame.Rect(0, self.size, self.size, self.size))
-            self.block_list.append(pygame.Rect(self.size, self.size, self.size, self.size))
-            self.block_list.append(pygame.Rect(self.size*2, self.size, self.size, self.size))
+            self.block_list.append(pygame.Rect(
+                self.size, 0, self.size, self.size))
+            self.block_list.append(pygame.Rect(
+                0, self.size, self.size, self.size))
+            self.block_list.append(pygame.Rect(
+                self.size, self.size, self.size, self.size))
+            self.block_list.append(pygame.Rect(
+                self.size*2, self.size, self.size, self.size))
 
     class Rectangle(pygame.sprite.Sprite):
         def __init__(self, x, y):
@@ -158,7 +162,7 @@ class Engine:
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-            
+
     def gameLoop(self, FPS=50):
         global clockTick
         clockTick = time.time()
@@ -175,14 +179,6 @@ class Engine:
             rotX = b[1].x
             rotY = b[1].y
             type = b[2]
-            log(f"position : " + str(posX) + " ; " + str(posY) + " ; " + str(type))
-
-            # log(f"position : " + str(posX) + " ; " + str(posY))
-            #log(f"type : " + str(type))
-            # log(f"position : " + str(self.posX) + " ; " + str(self.posY))
-            # TODO cr�er uns structure pour les rectangles re�u
-            #  b[0].x et b[0].y position physique du carr�
-            #  b[1].x et b[1].y vecteur rotation du carr�
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
@@ -195,12 +191,12 @@ class Engine:
                 plateform = self.Rectangle(posX, posY)
                 self.sprite_group.add(plateform)
 
-            #elif type == 1:
+            # elif type == 1:
             #    self.screen.blit(pygame.transform.rotate(pygame.image.load(g.IShape).convert_alpha(), angle_deg), (posX, posY))
 
             elif type == 7:
                 shape = self.TShape(posX, posY)
-                #shape.image = pygame.transform.rotate(shape.image, angle_deg)
+                shape.image = pygame.transform.rotate(shape.image, angle_deg)
                 self.sprite_group.add(shape)
 
         if g.gameState == MENU_LOGIN:
@@ -248,7 +244,6 @@ class Engine:
                     packet = json.dumps(
                         [{"packet": ClientPackets.CArrowKey, "key": 4}])
                     g.tcpConn.sendData(packet)
-            
 
         self.space.step(1/50.0)
 
