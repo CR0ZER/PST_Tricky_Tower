@@ -74,7 +74,8 @@ class Engine:
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
-        theme_background_image.background_color = pygame_menu.BaseImage(image_path=g.background_menu)
+        theme_background_image.background_color = pygame_menu.BaseImage(
+            image_path=g.background_menu)
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -135,8 +136,8 @@ class Engine:
         clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
-        self.posX = 0
-        self.posY = 0
+        posX = 0
+        posY = 0
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x
@@ -152,7 +153,7 @@ class Engine:
         elif g.gameState == MENU_REGISTER:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0), )
             self.sprite = self.Sprite(posX, posY, 20)
-            #self.sprite.blit(pygame.image.load("./src/assets/Game_Assets/R/R.png"), (0,0))
+            # self.sprite.blit(pygame.image.load("./src/assets/Game_Assets/R/R.png"), (0,0))
             self.sprite_group = pygame.sprite.Group()
             self.sprite_group.add(self.sprite)
             self.sprite_group.draw(self.screen)

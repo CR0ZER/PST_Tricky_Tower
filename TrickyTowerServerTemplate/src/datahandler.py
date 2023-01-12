@@ -20,6 +20,8 @@ class DataHandler():
 
             elif packetType == ClientPackets.CQuit:
                 self.handleQuit(index)
+            elif packetType == ClientPackets.CArrowKey:
+                self.handleKey(index, jsonData)
 
             else:
                 # Packet is unknown - hacking attempt
@@ -49,3 +51,6 @@ class DataHandler():
 
     def handleQuit(self, index):
         closeConnection(index)
+
+    def handleArrow(self, index, jsonData):
+        g.game.players[index].key = jsonData[0]["key"]

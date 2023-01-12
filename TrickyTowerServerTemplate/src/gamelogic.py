@@ -109,10 +109,6 @@ def sendBlock():
     packet = json.dumps([{"packet": ServerPackets.SBeginBlock}])
     g.conn.sendDataToAll(packet)
     for b in g.game.space.bodies:
-        # log('ID :' + str(b._id_counter))
-        # log('Position :' + str(b._get_position()))
-        # log('Rot Vect :' + str(b._get_rotation_vector()))
-        # log('BodyType :' + str(b._get_type()))
         packet = json.dumps([{"packet": ServerPackets.SSendBlock, "ID": b._id_counter,
                              "positionX": b._get_position().x, "positionY": b._get_position().y, "rotationX": b._get_rotation_vector().x, "rotationY": b._get_rotation_vector().y}])
         g.conn.sendDataToAll(packet)
