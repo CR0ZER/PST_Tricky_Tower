@@ -122,16 +122,17 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
+
     class Rectangle(pygame.sprite.Sprite):
         def __init__(self, x, y, type):
             super().__init__()
             if type == 1:
                 self.rect = pygame.Rect(x, y, 20, 20)
                 self.image = pygame.Surface((20, 20))
-                image = Image.open(g.square); image = image.resize((20, 20), Image.ANTIALIAS); image.save(g.square, "JPG")
-                self.image.blit(image, (0, 0))
+                #self.image.blit(pygame.image.load(g.square), (0, 0))
+                self.image.fill((255, 0, 0))
                 self.rect = self.image.get_rect()
-                pygame.draw.rect(self.image, (0, 0, 20, 20))
+                pygame.draw.rect(self.image, (255, 0, 0), self.rect)
 
     def gameLoop(self, FPS=50):
         global clockTick
@@ -172,6 +173,8 @@ class Engine:
             self.sprite_group.draw(self.screen)
             pygame.display.update()
 
+
+
         elif g.gameState == MENU_CHAR:
             pass
 
@@ -192,6 +195,14 @@ class Engine:
                 g.gameState = 0
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 g.gameState = 0
+            elif event.type == KEYDOWN and event.key == K_z or event.key == K_UP:
+                self.sendData(1)
+            elif event.type == KEYDOWN and event.key == K_q or event.key == K_LEFT:
+                self.sendData(2)
+            elif event.type == KEYDOWN and event.key == K_s or event.key == K_DOWN:
+                self.sendData(3)
+            elif event.type == KEYDOWN and event.key == K_d or event.key == K_RIGHT:
+                self.sendData(4)
 
         self.space.step(1/50.0)
 
