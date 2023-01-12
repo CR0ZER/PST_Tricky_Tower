@@ -1,7 +1,6 @@
 from pickle import TRUE
 import time
 import os.path as path
-from PIL import Image
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -122,14 +121,13 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-
     class Rectangle(pygame.sprite.Sprite):
         def __init__(self, x, y, type):
             super().__init__()
             if type == 1:
                 self.rect = pygame.Rect(x, y, 20, 20)
                 self.image = pygame.Surface((20, 20))
-                #self.image.blit(pygame.image.load(g.square), (0, 0))
+                # self.image.blit(pygame.image.load(g.square), (0, 0))
                 self.image.fill((255, 0, 0))
                 self.rect = self.image.get_rect()
                 pygame.draw.rect(self.image, (255, 0, 0), self.rect)
@@ -139,9 +137,8 @@ class Engine:
         clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
-        
+
         self.sprite_group = pygame.sprite.Group()
-             
 
         posX = 0
         posY = 0
@@ -150,20 +147,17 @@ class Engine:
             posX = b[0].x
             posY = b[0].y
             type = b[2]
-            
-            #log(f"position : " + str(posX) + " ; " + str(posY))
+
+            # log(f"position : " + str(posX) + " ; " + str(posY))
 #            log(f"type : " + str(type))
             # log(f"position : " + str(self.posX) + " ; " + str(self.posY))
             # TODO cr�er uns structure pour les rectangles re�u
             #  b[0].x et b[0].y position physique du carr�
             #  b[1].x et b[1].y vecteur rotation du carr�
 
-        
-
             if type == 1:
                 self.sprite_group.add(self.Rectangle(posX, posY, type))
                 self.sprite_group.update()
-
 
         if g.gameState == MENU_LOGIN:
             self.menu.mainloop(self.screen, disable_loop=True)
@@ -172,8 +166,6 @@ class Engine:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
             self.sprite_group.draw(self.screen)
             pygame.display.update()
-
-
 
         elif g.gameState == MENU_CHAR:
             pass
@@ -193,16 +185,25 @@ class Engine:
         for event in pygame.event.get():
             if event.type == QUIT:
                 g.gameState = 0
-            elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                g.gameState = 0
-            elif event.type == KEYDOWN and event.key == K_z or event.key == K_UP:
-                self.sendData(1)
-            elif event.type == KEYDOWN and event.key == K_q or event.key == K_LEFT:
-                self.sendData(2)
-            elif event.type == KEYDOWN and event.key == K_s or event.key == K_DOWN:
-                self.sendData(3)
-            elif event.type == KEYDOWN and event.key == K_d or event.key == K_RIGHT:
-                self.sendData(4)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    g.gameState = 0
+                elif event.key == pygame.K_z or event.key == K_UP:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 1}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_q or event.key == K_LEFT:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 2}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_s or event.key == K_DOWN:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 3}])
+                    g.tcpConn.sendData(packet)
+                elif event.key == pygame.K_d or event.key == K_RIGHT:
+                    packet = json.dumps(
+                        [{"packet": ClientPackets.CArrowKey, "key": 4}])
+                    g.tcpConn.sendData(packet)
 
         self.space.step(1/50.0)
 

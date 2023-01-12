@@ -22,5 +22,6 @@ clockTime = 0
 # loggers
 serverLogger = None
 connectionLogger = None
+dataHandler = None
 
 # physics

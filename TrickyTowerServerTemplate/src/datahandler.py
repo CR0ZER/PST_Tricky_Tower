@@ -52,5 +52,5 @@ class DataHandler():
     def handleQuit(self, index):
         closeConnection(index)
 
-    def handleArrow(self, index, jsonData):
+    def handleKey(self, index, jsonData):
         g.game.players[index].key = jsonData[0]["key"]

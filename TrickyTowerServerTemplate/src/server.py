@@ -15,8 +15,6 @@ from datahandler import *
 import global_vars as g
 from objects import *
 
-dataHandler = None
-
 
 def startServer():
     # start gui
@@ -26,7 +24,6 @@ def startServer():
     setupLogging()
 
     # start server
-    global dataHandler
 
     startTime = time.time()
 
@@ -38,7 +35,7 @@ def startServer():
 
     loadGameData()
 
-    dataHandler = DataHandler()
+    g.dataHandler = DataHandler()
 
     endTime = time.time()
     totalTime = (endTime - startTime)*1000
@@ -104,14 +101,13 @@ class gameServerProtocol(LineReceiver):
         self.factory.clients.remove(self)
 
     def lineReceived(self, data):
-        global dataHandler
         clientIndex = self.factory.clients.index(self)
 
         g.connectionLogger.debug(
             "Received data from " + str(self.transport.getPeer().host))
         g.connectionLogger.debug(" -> " + str(data))
 
-        dataHandler.handleData(clientIndex, data)
+        g.dataHandler.handleData(clientIndex, data)
 
     def closeConnection(self, index):
         ''' closes connection with client #index '''
