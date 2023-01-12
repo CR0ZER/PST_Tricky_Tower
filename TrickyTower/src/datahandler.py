@@ -21,18 +21,29 @@ class DataHandler:
             self.handleSLoginOK(jsonData)
         elif packetType == ServerPackets.SSendBlock:
             self.handleBlock(jsonData)
-
+        elif packetType == ServerPackets.SBeginBlock:
+            self.handleBeginPacket()
+        elif packetType == ServerPackets.SEndBlock:
+            self.handleEndPacket()
         else:
             # Packet is unknown - hacking attempt
             # log("potential hacking attempt")
             pass
 
     def handleBlock(self, jsonData):
-        g.Blocks.append((Vec2d(jsonData[0]["positionX"], jsonData[0]["positionY"]), Vec2d(
-            jsonData[0]["rotationX"], jsonData[0]["rotationY"])))
+        g.NewBlock.append((Vec2d(jsonData[0]["positionX"], jsonData[0]["positionY"]), Vec2d(
+            jsonData[0]["rotationX"], jsonData[0]["rotationY"]), jsonData[0]["type"]))
+        #log(f"Type : {g.NewBlock[0][2]} \n")
         # log("position" + str(jsonData[0]["positionY"]))
 
     def handleAlertMsg(self, jsonData):
         msg = jsonData[0]["msg"]
 
         log(msg)
+
+    def handleBeginPacket(self):
+        g.NewBlock.clear()
+
+    def handleEndPacket(self):
+        g.Blocks.clear()
+        g.Blocks = g.NewBlock.copy()

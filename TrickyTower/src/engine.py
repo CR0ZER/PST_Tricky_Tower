@@ -1,6 +1,7 @@
 from pickle import TRUE
 import time
 import os.path as path
+from PIL import Image
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -115,41 +116,50 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-    class Sprite(pygame.sprite.Sprite):
-        def __init__(self, x, y, size):
+    class Rectangle(pygame.sprite.Sprite):
+        def __init__(self, x, y, type):
             super().__init__()
-
-            self.image = pygame.Surface([size, size])
-            self.image.fill((255, 0, 0))
-            self.rect = self.image.get_rect()
-            self.rect.x = x
-            self.rect.y = y
+            if type == 1:
+                self.rect = pygame.Rect(x, y, 20, 20)
+                self.image = pygame.Surface((20, 20))
+                image = Image.open(g.square); image = image.resize((20, 20), Image.ANTIALIAS); image.save(g.square, "JPG")
+                self.image.blit(image, (0, 0))
+                self.rect = self.image.get_rect()
+                pygame.draw.rect(self.image, (0, 0, 20, 20))
 
     def gameLoop(self, FPS=50):
         global clockTick
         clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
-        posX = 0
-        posY = 0
+        
+        self.sprite_group = pygame.sprite.Group()
+             
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x
             posY = b[0].y
+            type = b[2]
+            
+            #log(f"position : " + str(posX) + " ; " + str(posY))
+#            log(f"type : " + str(type))
             # log(f"position : " + str(self.posX) + " ; " + str(self.posY))
             # TODO cr�er uns structure pour les rectangles re�u
             #  b[0].x et b[0].y position physique du carr�
             #  b[1].x et b[1].y vecteur rotation du carr�
 
+        
+
+            if type == 1:
+                self.sprite_group.add(self.Rectangle(posX, posY, type))
+                self.sprite_group.update()
+
+
         if g.gameState == MENU_LOGIN:
             self.menu.mainloop(self.screen, disable_loop=True)
 
         elif g.gameState == MENU_REGISTER:
-            self.screen.blit(pygame.image.load(g.background_game), (0, 0), )
-            self.sprite = self.Sprite(posX, posY, 20)
-            #self.sprite.blit(pygame.image.load("./src/assets/Game_Assets/R/R.png"), (0,0))
-            self.sprite_group = pygame.sprite.Group()
-            self.sprite_group.add(self.sprite)
+            self.screen.blit(pygame.image.load(g.background_game), (0, 0))
             self.sprite_group.draw(self.screen)
             pygame.display.update()
 
