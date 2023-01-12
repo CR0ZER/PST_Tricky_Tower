@@ -70,7 +70,7 @@ class Game():
                 self.blocks.remove(b)
 
     def createRamdomBlock(self, index):
-        self.players[index].block.body = Block()
+        self.players[index].block = Block()
         self.players[index].block.body = pymunk.Body()
         self.players[index].block.body.position = 105+index*250, 500
 
