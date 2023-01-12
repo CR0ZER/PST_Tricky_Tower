@@ -144,21 +144,26 @@ class gameServerFactory(Factory):
 
 
 # server loop and timings
-clockTick = 0
-
 pygame.init()
 screen = pygame.display.set_mode((1080, 720))
 print_options = pymunk.pygame_util.DrawOptions(screen)
 # print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
 # print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
 
+enablePh = True
+
 
 def serverLoop():
-
+    global enablePh
     g.clockTime = time.time()
 
-    g.game.space.step(0.02)
-    g.game.removeFalledBlocks()
+    if enablePh == True:
+        g.game.space.step(0.02)
+        g.game.removeFalledBlocks()
+        for i in range(4):
+            g.game.playerInput(i)
+            g.game.playerMove(i)
+            g.game.checkPlayerCollide(i)
 
     screen.fill(pygame.Color("black"))
     g.game.space.debug_draw(print_options)
@@ -166,8 +171,7 @@ def serverLoop():
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                for i in range(4):
-                    g.game.createRamdomBlock(i)
+                enablePh = not (enablePh)
 
     sendBlock()  # Envoie tout les blocks aux clients
 

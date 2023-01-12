@@ -11,7 +11,7 @@ import json
 class DataHandler():
     def handleData(self, index, data):
         if data:
-            log(str(data))
+            # log(str(data))
             jsonData = json.loads(data)
             packetType = jsonData[0]["packet"]
 

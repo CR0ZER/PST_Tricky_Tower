@@ -2,7 +2,11 @@ from typing_extensions import Self
 from constants import *
 import global_vars as g
 import pymunk
+
 import random
+from utils import *
+
+from pymunk.vec2d import *
 
 
 class Player():
@@ -21,29 +25,67 @@ class Block():
         self.type = None
 
 
+def doCollide(shape1, shape2):
+    if shape1 == None or shape2 == None:
+        return False
+    col = shape1.shapes_collide(shape2)
+    if (len(col.points) >= 1):
+        # Ultra weird shit happen when tetris piece 5 or 6 are summoned so if !=0 is IMPORTANT
+        if col.points[0].distance != 0:
+            log("go")
+            return True
+    return False
+
+
 class Game():
     def __init__(self):
         self.nbplayer = 0
         self.players = [Player() for i in range(MAX_PLAYERS)]
         self.space = pymunk.Space()
         self.space.gravity = 0, 200
+        self.space.sleep_time_threshold = 30
         self.static_Blocks = []  # Create a Body
         self.blocks = []
 
-    def playerInput(self):
-        for p in self.players:
-            if p.key != None:
-                if p.key == 1:
-                    p.key = 0
-                elif p.key == 2:
-                    p.body.position.x -= 5
-                    p.key = 0
-                elif p.key == 3:
-                    p.body.position.y += 2
-                    p.key = 0
-                elif p.key == 4:
-                    p.body.position.x += 5
-                    p.key = 0
+    def playerMove(self, index):
+        p = self.players[index]
+        p.block.body.position += Vec2d(0, p.dropSpeed)
+        p.dropSpeed = DROP_SPEED
+
+    def playerInput(self, index):
+        p = self.players[index]
+
+        if p.key != 0:
+            if p.key == 1:
+                p.key = 0
+            elif p.key == 2:
+                p.block.body.position -= Vec2d(5, 0)
+                p.key = 0
+            elif p.key == 3:
+                p.dropSpeed = BOOST_DROP_SPEED
+                p.key = 0
+            elif p.key == 4:
+                p.block.body.position += Vec2d(5, 0)
+                p.key = 0
+
+    def checkPlayerCollide(self, index):
+        p = self.players[index]
+        if doCollide(p.block.shape1, self.static_Blocks[index].shape1) or doCollide(p.block.shape2, self.static_Blocks[index].shape1):
+            p.block.body.activate()
+            self.blocks.append(p.block)
+            p.block = None
+            self.createRamdomBlock(index)
+            return
+
+        for b in self.blocks:
+            if doCollide(p.block.shape1, b.shape1) or doCollide(p.block.shape1, b.shape2) or doCollide(p.block.shape2, b.shape1) or doCollide(p.block.shape2, b.shape2):
+                p.block.body.activate()
+                self.blocks.append(p.block)
+                p.block = None
+                self.createRamdomBlock(index)
+                return
+        if (p.block.body.is_sleeping == False):
+            p.block.body.sleep()
 
     def launch(self):
         for i in range(4):
@@ -72,7 +114,7 @@ class Game():
     def createRamdomBlock(self, index):
         self.players[index].block = Block()
         self.players[index].block.body = pymunk.Body()
-        self.players[index].block.body.position = 105+index*250, 500
+        self.players[index].block.body.position = 105+index*250, 300
 
         r = random.randint(1, 7)
         self.players[index].block.type = r
@@ -93,7 +135,7 @@ class Game():
             else:
                 if r == 5:
                     box = [(0, 0), (10, 0), (10, 30), (0, 30)]
-                    box2 = [(10, 0), (20, 0), (20, 10), (10, 10)]
+                    box2 = [(20, 0), (20, 10), (10, 10), (10, 0)]
                 elif r == 6:
                     box = [(10, 0), (20, 0), (20, 30), (10, 30)]
                     box2 = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -111,6 +153,7 @@ class Game():
 
                 self.space.add(
                     self.players[index].block.body, self.players[index].block.shape1, self.players[index].block.shape2)
+                self.players[index].block.body.sleep()
                 return
             self.players[index].block.shape1 = pymunk.Poly(
                 self.players[index].block.body, box)
@@ -123,15 +166,17 @@ class Game():
 
             self.space.add(
                 self.players[index].block.body, self.players[index].block.shape1, self.players[index].block.shape2)
+            self.players[index].block.body.sleep()
             return
 
-        self.players[index].block.body.position = 105+index*250, 500
         self.players[index].block.shape1 = pymunk.Poly(
             self.players[index].block.body, box)
         self.players[index].block.shape1.mass = 4 * MASS_MULTIPLIER
         self.players[index].block.shape1.friction = BLOCK_FRICTION
+
         self.space.add(self.players[index].block.body,
                        self.players[index].block.shape1)
+        self.players[index].block.body.sleep()
 
 
 class AccountClass():
