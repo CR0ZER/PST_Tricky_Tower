@@ -108,7 +108,7 @@ def sendLeftGame(index):
 def sendBlock():
     packet = json.dumps([{"packet": ServerPackets.SBeginBlock}])
     g.conn.sendDataToAll(packet)
-    for i in range(g.game.nbplayer):
+    for i in range(4):
         bp = g.game.players[i].block
         packet = json.dumps([{"packet": ServerPackets.SSendBlock, "positionX": bp.body._get_position().x, "positionY": bp.body._get_position().y, "rotationX": bp.body._get_rotation_vector().x,
                             "rotationY": bp.body._get_rotation_vector().y, "type": bp.type}])

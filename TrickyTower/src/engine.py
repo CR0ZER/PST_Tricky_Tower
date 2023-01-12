@@ -1,6 +1,6 @@
 from pickle import TRUE
 import time
-import os.path as path
+import math
 import pygame
 import pymunk
 import pymunk.pygame_util
@@ -35,6 +35,8 @@ class Engine:
         self.shape = None
         self.menu = None
         self.background = None
+
+        self.sprite_group = pygame.sprite.Group()
 
     def changeState(self):
         g.gameState = 1
@@ -121,43 +123,85 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
 
-    class Rectangle(pygame.sprite.Sprite):
+    class Surface(pygame.sprite.Sprite):
         def __init__(self, x, y, type):
             super().__init__()
+            self.image = None
             if type == 1:
-                self.rect = pygame.Rect(x, y, 20, 20)
-                self.image = pygame.Surface((20, 20))
-                # self.image.blit(pygame.image.load(g.square), (0, 0))
+                #self.image = pygame.Surface((10, 40))
                 self.image.fill((255, 0, 0))
                 self.rect = self.image.get_rect()
-                pygame.draw.rect(self.image, (255, 0, 0), self.rect)
+                self.rect.x = x
+                self.rect.y = y
 
+    class TShape(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.size = 10
+            self.image = pygame.Surface((self.size*3, self.size*2))
+            self.image.fill((255, 0, 0))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+
+            self.block_list = []
+            self.block_list.append(pygame.Rect(self.size, 0, self.size, self.size))
+            self.block_list.append(pygame.Rect(0, self.size, self.size, self.size))
+            self.block_list.append(pygame.Rect(self.size, self.size, self.size, self.size))
+            self.block_list.append(pygame.Rect(self.size*2, self.size, self.size, self.size))
+
+    class Rectangle(pygame.sprite.Sprite):
+        def __init__(self, x, y):
+            super().__init__()
+            self.image = pygame.Surface((70, 150))
+            self.image.fill((0, 0, 255))
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            
     def gameLoop(self, FPS=50):
         global clockTick
         clockTick = time.time()
         """the main loop of the game"""
         # TODO: DIRTY AREAS
 
-        self.sprite_group = pygame.sprite.Group()
-
+        self.sprite_group.empty()
         posX = 0
         posY = 0
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
-            posX = b[0].x
-            posY = b[0].y
+            posX = b[0].x + 300
+            posY = b[0].y + 50
+            rotX = b[1].x
+            rotY = b[1].y
             type = b[2]
+            log(f"position : " + str(posX) + " ; " + str(posY) + " ; " + str(type))
 
             # log(f"position : " + str(posX) + " ; " + str(posY))
-#            log(f"type : " + str(type))
+            #log(f"type : " + str(type))
             # log(f"position : " + str(self.posX) + " ; " + str(self.posY))
             # TODO cr�er uns structure pour les rectangles re�u
             #  b[0].x et b[0].y position physique du carr�
             #  b[1].x et b[1].y vecteur rotation du carr�
 
-            if type == 1:
-                self.sprite_group.add(self.Rectangle(posX, posY, type))
-                self.sprite_group.update()
+            angle_rad = math.atan2(rotY, rotX)
+            angle_deg = math.degrees(angle_rad)
+            """bloc = self.Surface(posX, posY, type)
+            if bloc.image is not None:
+                bloc.image = pygame.transform.rotate(bloc.image, angle_deg)
+                self.sprite_group.add(bloc)
+                print(len(self.sprite_group))"""
+            if type == 0:
+                plateform = self.Rectangle(posX, posY)
+                self.sprite_group.add(plateform)
+
+            #elif type == 1:
+            #    self.screen.blit(pygame.transform.rotate(pygame.image.load(g.IShape).convert_alpha(), angle_deg), (posX, posY))
+
+            elif type == 7:
+                shape = self.TShape(posX, posY)
+                #shape.image = pygame.transform.rotate(shape.image, angle_deg)
+                self.sprite_group.add(shape)
 
         if g.gameState == MENU_LOGIN:
             self.menu.mainloop(self.screen, disable_loop=True)
@@ -184,7 +228,7 @@ class Engine:
 
         for event in pygame.event.get():
             if event.type == QUIT:
-                g.gameState = 0
+                pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     g.gameState = 0
@@ -204,6 +248,7 @@ class Engine:
                     packet = json.dumps(
                         [{"packet": ClientPackets.CArrowKey, "key": 4}])
                     g.tcpConn.sendData(packet)
+            
 
         self.space.step(1/50.0)
 
