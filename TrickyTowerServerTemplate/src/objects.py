@@ -31,8 +31,7 @@ def doCollide(shape1, shape2):
     col = shape1.shapes_collide(shape2)
     if (len(col.points) >= 1):
         # Ultra weird shit happen when tetris piece 5 or 6 are summoned so if !=0 is IMPORTANT
-        if col.points[0].distance != 0:
-            log("go")
+        if col.points[0].distance != 0.0:
             return True
     return False
 
