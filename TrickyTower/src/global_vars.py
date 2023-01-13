@@ -45,4 +45,5 @@ IMGIshape = None
 IMGPlatform = None
 IMGflag = None
 
+nbPlayers = 0
 winner = 0

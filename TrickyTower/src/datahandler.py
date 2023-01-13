@@ -25,6 +25,12 @@ class DataHandler:
             self.handleBeginPacket()
         elif packetType == ServerPackets.SEndBlock:
             self.handleEndPacket()
+        elif packetType == ServerPackets.SPlayerCount:
+            self.handlePlayerCount(jsonData)
+        elif packetType == ServerPackets.SGameStart:
+            self.handleGameStart()
+        elif packetType == ServerPackets.SWinner:
+            self.handleWinner(jsonData)
         else:
             # Packet is unknown - hacking attempt
             # log("potential hacking attempt")
@@ -47,3 +53,13 @@ class DataHandler:
     def handleEndPacket(self):
         g.Blocks.clear()
         g.Blocks = g.NewBlock.copy()
+
+    def handlePlayerCount(self, jsonData):
+        g.nbPlayers = jsonData[0]["nbPlayers"]
+
+    def handleGameStart(self):
+        g.gameState = 1
+
+    def handleWinner(jsonData):
+        g.winner = jsonData[0]["winner"]
+        g.gameState = 2

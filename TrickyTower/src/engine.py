@@ -27,7 +27,6 @@ class Engine:
         self.screen = None
         self.clock = None
         self.space = None
-        self.nbPlayer = 0
         self.shape = None
         self.menu = None
         self.background = None
@@ -44,7 +43,6 @@ class Engine:
         time.sleep(2)
         #self.sendPlayerPacket()
         log("boom2")
-        g.gameState = 1
     
     def init(self):
 
@@ -85,7 +83,7 @@ class Engine:
         menu2 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu2.add.vertical_margin(200)
-        menu2.add.label(title=f'Nombre de joueurs : {self.nbPlayer}', font_color=(
+        menu2.add.label(title=f'Nombre de joueurs : {g.nbPlayers}', font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.vertical_margin(50)
         menu2.add.button('Prêt', self.changeState2, font_color=(
@@ -266,9 +264,6 @@ class Engine:
             self.sprite_group.draw(self.screen)
 
         elif g.gameState == MENU_CHAR:
-            pass
-
-        elif g.gameState == MENU_NEWCHAR:
             pygame.font.init()
             my_font = pygame.font.Font(g.font, 100)
             text_surface = my_font.render(f"Joueur {g.winner} a gagné !", True, pygame.color.Color("white"))
@@ -280,6 +275,9 @@ class Engine:
             self.disconnect()
             time.sleep(10)
             g.gameState = 0
+
+        elif g.gameState == MENU_NEWCHAR:
+            pass
 
         elif g.gameState == MENU_INGAME:
             # todo: dirty areas
