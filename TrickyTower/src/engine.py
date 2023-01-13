@@ -36,7 +36,6 @@ class Engine:
     def changeState(self):
         reactor.callLater(1, self.sendPlayerPacket)
         log("boom2")
-        g.gameState = 1
 
     def init(self):
 
