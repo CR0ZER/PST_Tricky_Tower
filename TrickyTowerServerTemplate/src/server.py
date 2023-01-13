@@ -164,8 +164,11 @@ def serverLoop():
             g.game.playerInput(i)
             g.game.playerMove(i)
             g.game.checkPlayerCollide(i)
+            enablePh = g.game.areYaWinningSon(i)
 
     screen.fill(pygame.Color("black"))
+    pygame.draw.line(screen, (255, 0, 0), (0, WIN_HEIGHT),
+                     (1080, WIN_HEIGHT), 1)
     g.game.space.debug_draw(print_options)
     pygame.display.flip()
     for event in pygame.event.get():

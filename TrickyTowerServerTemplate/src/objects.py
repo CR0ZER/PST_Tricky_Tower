@@ -15,6 +15,9 @@ class Player():
         self.state = 0
         self.dropSpeed = 10
         self.block = None
+        self.BeginWinTime = None
+        self.clockMovementLeft = None
+        self.clockMovementRight = None
         for i in range(5):
             self.key.append(False)
 
@@ -48,6 +51,19 @@ class Game():
         self.static_Blocks = []  # Create a Body
         self.blocks = []
 
+    def areYaWinningSon(self, index):
+        s = self.space.segment_query_first(
+            (index*250, WIN_HEIGHT), ((index + 1)*250, WIN_HEIGHT), 0.0, pymunk.ShapeFilter(categories=0x1))
+        if s:
+            if self.players[index].BeginWinTime == None:
+                self.players[index].BeginWinTime = g.clockTime
+            elif self.players[index].BeginWinTime + 3 < g.clockTime:
+                log("player " + str(index) + " WIN !")
+                return False
+        else:
+            self.players[index].BeginWinTime = None
+        return True
+
     def playerMove(self, index):
         p = self.players[index]
         p.block.body.position += Vec2d(0, p.dropSpeed)
@@ -60,13 +76,25 @@ class Game():
             p.key[DIR_UP] = False
 
         if p.key[DIR_LEFT] == True:  # move left
-            p.block.body.position -= Vec2d(5, 0)
+            if p.clockMovementLeft == None:
+                p.clockMovementLeft = g.clockTime
+                p.block.body.position -= Vec2d(5, 0)
+            elif p.clockMovementLeft + HORIZONTAL_TICK_MOV < g.clockTime:
+                p.clockMovementLeft = None
+        if p.key[DIR_LEFT] == False:
+            p.clockMovementLeft = None
 
         if p.key[DIR_DOWN] == True:  # speed up descent
             p.dropSpeed = BOOST_DROP_SPEED
 
         if p.key[DIR_RIGHT] == True:  # move right
-            p.block.body.position += Vec2d(5, 0)
+            if p.clockMovementRight == None:
+                p.clockMovementRight = g.clockTime
+                p.block.body.position += Vec2d(5, 0)
+            elif p.clockMovementRight + HORIZONTAL_TICK_MOV < g.clockTime:
+                p.clockMovementRight = None
+        if p.key[DIR_RIGHT] == False:
+            p.clockMovementRight = None
 
     def checkPlayerCollide(self, index):
         p = self.players[index]
@@ -110,6 +138,15 @@ class Game():
                 else:
                     self.space.remove(b.body, b.shape1)
                 self.blocks.remove(b)
+        for i in range(MAX_PLAYERS):
+            if self.players[i].block.body.position.y > 730:
+                if self.players[i].block.type >= 3:
+                    self.space.remove(
+                        self.players[i].block.body, self.players[i].block.shape1, self.players[i].block.shape2)
+                else:
+                    self.space.remove(
+                        self.players[i].block.body, self.players[i].block.shape1)
+                self.createRamdomBlock(i)
 
     def createRamdomBlock(self, index):
         self.players[index].block = Block()
