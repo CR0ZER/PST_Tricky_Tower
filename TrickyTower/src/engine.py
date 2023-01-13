@@ -34,11 +34,6 @@ class Engine:
         self.sprite_group = pygame.sprite.Group()
 
     def changeState(self):
-        g.gameState = 1
-        time.sleep(2)
-        log("boom")
-
-    def changeState2(self):
         g.gameEngine.initConnection()
         reactor.callLater(1, self.sendPlayerPacket)
         log("boom2")
@@ -84,7 +79,7 @@ class Engine:
         menu2.add.label(title=f'Nombre de joueurs : {g.nbPlayers}', font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.vertical_margin(50)
-        menu2.add.button('Prêt', self.changeState2, font_color=(
+        menu2.add.button('Prêt', self.changeState, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.button('Retour', action=pygame_menu.events.BACK, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
