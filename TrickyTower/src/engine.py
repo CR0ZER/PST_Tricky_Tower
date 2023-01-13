@@ -70,6 +70,8 @@ class Engine:
         g.IMGS2shape = pygame.transform.scale(g.IMGS2shape, (60, 60))
         g.IMGIshape = pygame.image.load(g.Ishape).convert_alpha()
         g.IMGIshape = pygame.transform.scale(g.IMGIshape, (60, 60))
+        g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
+        g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -127,6 +129,7 @@ class Engine:
             super().__init__()
             self.image = g.IMGLshape
             self.rect = self.image.get_rect()
+            self.image = pygame.transform.rotate(self.image, 180)
             self.rect.center = (x, y)
 
     class L2Shape(pygame.sprite.Sprite):
@@ -134,6 +137,7 @@ class Engine:
             super().__init__()
             self.image = g.IMGL2shape
             self.rect = self.image.get_rect()
+            self.image = pygame.transform.rotate(self.image, 180)
             self.rect.center = (x, y)
 
     class RShape(pygame.sprite.Sprite):
@@ -141,13 +145,14 @@ class Engine:
             super().__init__()
             self.image = g.IMGRshape
             self.rect = self.image.get_rect()
-            self.rect.center = (x, y)
+            self.rect.center = (x-5, y)
 
     class SShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGSshape
             self.rect = self.image.get_rect()
+            self.image = pygame.transform.rotate(self.image, 180)
             self.rect.center = (x, y)
 
     class S2Shape(pygame.sprite.Sprite):
@@ -155,6 +160,7 @@ class Engine:
             super().__init__()
             self.image = g.IMGS2shape
             self.rect = self.image.get_rect()
+            self.image = pygame.transform.rotate(self.image, 180)
             self.rect.center = (x, y)
 
     class IShape(pygame.sprite.Sprite):
@@ -162,16 +168,14 @@ class Engine:
             super().__init__()
             self.image = g.IMGIshape
             self.rect = self.image.get_rect()
-            self.rect.center = (x, y)
+            self.rect.center = (x-10, y+10)
 
     class Rectangle(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((70, 150))
-            self.image.fill((0, 0, 255))
+            self.image = g.IMGPlatform
             self.rect = self.image.get_rect()
-            self.rect.x = x
-            self.rect.y = y
+            self.rect.center = (x+20, y+40)
 
     def gameLoop(self, FPS=50):
         global clockTick
@@ -185,7 +189,7 @@ class Engine:
         for b in g.Blocks:
             # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x + 300
-            posY = b[0].y + 50
+            posY = b[0].y + 125
             rotX = b[1].x
             rotY = b[1].y
             type = b[2]
@@ -208,22 +212,22 @@ class Engine:
                 self.sprite_group.add(shape)
 
             elif type == 3:
-                shape = self.SShape(posX, posY)
-                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
-                self.sprite_group.add(shape)
-
-            elif type == 4:
                 shape = self.S2Shape(posX, posY)
                 shape.image = pygame.transform.rotate(shape.image, -angle_deg)
                 self.sprite_group.add(shape)
 
+            elif type == 4:
+                shape = self.SShape(posX, posY)
+                shape.image = pygame.transform.rotate(shape.image, -angle_deg)
+                self.sprite_group.add(shape)
+
             elif type == 5:
-                shape = self.LShape(posX, posY)
+                shape = self.L2Shape(posX, posY)
                 shape.image = pygame.transform.rotate(shape.image, -angle_deg)
                 self.sprite_group.add(shape)
 
             elif type == 6:
-                shape = self.L2Shape(posX, posY)
+                shape = self.LShape(posX, posY)
                 shape.image = pygame.transform.rotate(shape.image, -angle_deg)
                 self.sprite_group.add(shape)
 

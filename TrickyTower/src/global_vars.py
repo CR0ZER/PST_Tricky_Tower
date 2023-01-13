@@ -31,6 +31,7 @@ Lshape = "./src/assets/Game_Assets/L.png"
 L2shape = "./src/assets/Game_Assets/L_2.png"
 Tshape = "./src/assets/Game_Assets/T.png"
 Ishape = "./src/assets/Game_Assets/I.png"
+Platform = "./src/assets/Game_Assets/platform.png"
 
 IMGRshape = None
 IMGSshape = None
@@ -39,3 +40,4 @@ IMGLshape = None
 IMGL2shape = None
 IMGTshape = None
 IMGIshape = None
+IMGPlatform = None
