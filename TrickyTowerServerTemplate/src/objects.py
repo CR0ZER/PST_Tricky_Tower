@@ -64,6 +64,25 @@ class Game():
             self.players[index].BeginWinTime = None
         return True
 
+    def clear(self, b):
+        if b.type >= 3:
+            self.space.remove(b.body, b.shape1, b.shape2)
+        else:
+            self.space.remove(b.body, b.shape1)
+        self.blocks.remove(b)
+
+    def boundariesCleaning(self, index):
+        s = self.space.segment_query(
+            (index*250+5, 0), (index*250+5, 750), 0.0, pymunk.ShapeFilter(categories=0x1))
+        for bo in s.shape.body:
+            b = Block()
+            b.body = bo
+            if (len(bo.shapes) == 2):
+                b.shape2 = bo.shapes[1]
+            b.shape1 = bo.shapes[0]
+        sr = self.space.segment_query(
+            (index*250+5, 0), (index*250+5, 750), 0.0, pymunk.ShapeFilter(categories=0x1))
+
     def playerMove(self, index):
         p = self.players[index]
         p.block.body.position += Vec2d(0, p.dropSpeed)
@@ -133,20 +152,11 @@ class Game():
 
     def removeFalledBlocks(self):
         for b in self.blocks:
-            if b.body.position.y > 750:
-                if b.type >= 3:
-                    self.space.remove(b.body, b.shape1, b.shape2)
-                else:
-                    self.space.remove(b.body, b.shape1)
-                self.blocks.remove(b)
+            if b.body.position.y > 750 or b.body.position.x < 5 or (b.body.position.x > 250 - MARGIN and b.body.position.x < 250 + MARGIN) or (b.body.position.x > 500 - MARGIN and b.body.position.x < 500 + MARGIN) or (b.body.position.x > 750 - MARGIN and b.body.position.x < 750 + MARGIN) or b.body.position.x > 1000 - MARGIN:
+                self.clear(b)
         for i in range(MAX_PLAYERS):
             if self.players[i].block.body.position.y > 730:
-                if self.players[i].block.type >= 3:
-                    self.space.remove(
-                        self.players[i].block.body, self.players[i].block.shape1, self.players[i].block.shape2)
-                else:
-                    self.space.remove(
-                        self.players[i].block.body, self.players[i].block.shape1)
+                self.clear(self.players[i].block)
                 self.createRamdomBlock(i)
 
     def createRamdomBlock(self, index):
