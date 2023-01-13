@@ -27,7 +27,7 @@ class Engine:
         self.screen = None
         self.clock = None
         self.space = None
-        self.nbPlayer = 1
+        self.nbPlayer = 0
         self.shape = None
         self.menu = None
         self.background = None
@@ -36,10 +36,15 @@ class Engine:
 
     def changeState(self):
         g.gameState = 1
-        g.gameEngine.initConnection()
         time.sleep(2)
         log("boom")
 
+    def changeState2(self):
+        g.gameEngine.initConnection()
+        time.sleep(2)
+        self.sendPlayerPacket()
+        log("boom2")
+    
     def init(self):
 
         # self.initConfig(g.dataPath + '/config.cfg')
@@ -73,16 +78,29 @@ class Engine:
         g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
         g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
 
+        
+        menu2 = pygame_menu.Menu(
+            'Tricky Tower', g.height, g.width, theme=theme_background_image)
+        menu2.add.vertical_margin(200)
+        menu2.add.label(title=f'Nombre de joueurs : {self.nbPlayer}', font_color=(
+            255, 255, 255), font_name=g.font, font_size=50)
+        menu2.add.vertical_margin(50)
+        menu2.add.button('Prêt', self.changeState2, font_color=(
+            255, 255, 255), font_name=g.font, font_size=50)
+        menu2.add.button('Retour', action=pygame_menu.events.BACK, font_color=(
+            255, 255, 255), font_name=g.font, font_size=50)
+        
+
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
 
-        menu1.add.button('Jouer', action=self.changeState, font_color=(
-            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+        menu1.add.button('Jouer', action=menu2, font_color=(
+            255, 255, 255), font_name=g.font, font_size=50)
         menu1.add.button('The useless button', action=None, font_color=(
-            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+            255, 255, 255), font_name=g.font, font_size=50)
         menu1.add.button('Quitter', pygame_menu.events.EXIT, font_color=(
-            255, 255, 255), font_name='./src/assets/Game_Assets/telelower.ttf', font_size=50)
+            255, 255, 255), font_name=g.font, font_size=50)
         self.menu = menu1
 
         self.gameLoop()
@@ -311,6 +329,12 @@ class Engine:
             reactor.callLater(0.001, self.gameLoop)
         else:
             reactor.callLater(0.02 - t, self.gameLoop)
+
+    def sendPlayerPacket(self):
+        packet = json.dumps(
+            [{"packet": ClientPackets.CNewPlayer}]
+        )
+        g.tcpConn.sendData(packet)
 
     def quitGame(self):
         """called when quitting the game"""
