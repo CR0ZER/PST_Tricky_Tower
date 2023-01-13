@@ -2,10 +2,6 @@ from pickle import TRUE
 import time
 import math
 import pygame
-import pymunk
-import pymunk.pygame_util
-from pymunk.pygame_util import from_pygame, to_pygame
-import pymunk.autogeometry
 import pygame_menu
 from pygame.locals import *
 
@@ -52,32 +48,28 @@ class Engine:
         pygame.init()
         self.screen = pygame.display.set_mode((g.height, g.width))
         self.clock = pygame.time.Clock()
-
-        # pygame physics
-        self.space = pymunk.Space()
-        self.mass = 1
         self.size = (50, 50)
-        self.moment = pymunk.moment_for_box(self.mass, self.size)
-        self.body = pymunk.Body(self.mass, self.moment)
-        self.shape = pymunk.Poly.create_box(self.body, self.size)
-        self.space.add(self.body, self.shape)
-        self.force = pymunk.Vec2d(0, 30)
         self.background = pygame.Surface((g.width, g.height))
-
-        # pygame plateforme
-        def static_rect(space, x, y, r_width, r_height):
-            body = pymunk.Body(body_type=pymunk.Body.STATIC)
-            body.position = x, y
-            shape = pymunk.Poly.create_box(body, (r_width, r_height))
-            space.add(body, shape)
-
-        static_rect(self.space, 600, 900, 200, 400)
-        static_rect(self.space, 1000, 900, 200, 400)
 
         # pygame menu
         theme_background_image = pygame_menu.themes.THEME_DARK.copy()
         theme_background_image.background_color = pygame_menu.BaseImage(
             image_path=g.background_menu)
+
+        g.IMGTshape = pygame.image.load(g.Tshape).convert_alpha()
+        g.IMGTshape = pygame.transform.scale(g.IMGTshape, (60, 60))
+        g.IMGLshape = pygame.image.load(g.Lshape).convert_alpha()
+        g.IMGLshape = pygame.transform.scale(g.IMGLshape, (60, 60))
+        g.IMGL2shape = pygame.image.load(g.L2shape).convert_alpha()
+        g.IMGL2shape = pygame.transform.scale(g.IMGL2shape, (60, 60))
+        g.IMGRshape = pygame.image.load(g.Rshape).convert_alpha()
+        g.IMGRshape = pygame.transform.scale(g.IMGRshape, (60, 60))
+        g.IMGSshape = pygame.image.load(g.Sshape).convert_alpha()
+        g.IMGSshape = pygame.transform.scale(g.IMGSshape, (60, 60))
+        g.IMGS2shape = pygame.image.load(g.S2shape).convert_alpha()
+        g.IMGS2shape = pygame.transform.scale(g.IMGS2shape, (60, 60))
+        g.IMGIshape = pygame.image.load(g.Ishape).convert_alpha()
+        g.IMGIshape = pygame.transform.scale(g.IMGIshape, (60, 60))
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -126,63 +118,49 @@ class Engine:
     class TShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.Tshape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGTshape.copy()
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
     class LShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.Lshape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGLshape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
     class L2Shape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.L2shape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGL2shape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
     class RShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.Rshape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGRshape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
     class SShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.Sshape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGSshape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
-    
+
     class S2Shape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.S2shape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGS2shape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
     class IShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
-            self.image = pygame.Surface((3, 3))
-            self.image = pygame.image.load(g.Ishape).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (60, 60))
+            self.image = g.IMGIshape
             self.rect = self.image.get_rect()
             self.rect.center = (x, y)
 
@@ -214,7 +192,7 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
-            
+
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
                 self.sprite_group.add(plateform)
@@ -260,7 +238,6 @@ class Engine:
         elif g.gameState == MENU_REGISTER:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
             self.sprite_group.draw(self.screen)
-            pygame.display.update()
 
         elif g.gameState == MENU_CHAR:
             pass
@@ -318,40 +295,14 @@ class Engine:
                         [{"packet": ClientPackets.CArrowKey, "key": 4, "actived": False}])
                     g.tcpConn.sendData(packet)
 
-        self.space.step(1/50.0)
-
         # pygame.draw.rect(self.screen, (0, 0, 0), (1, 1))
 
         pygame.display.flip()
-        self.clock.tick(self.FRAMES_PER_SECOND)
-
-        # pygame.event.pump()
-        # for event in pygame.event.get():
-        #    # todo: organize this better...
-        #    if g.gameState == MENU_LOGIN:
-        #        pass
-        #
-        #    elif g.gameState == MENU_REGISTER:
-        #        pass
-        #
-        #    elif g.gameState == MENU_CHAR:
-        #        pass
-        #
-        #    elif g.gameState == MENU_NEWCHAR:
-        #        pass
-        #    elif g.gameState == MENU_INGAME:
-        #        pass
-        #
-        #    if event.type == pygame.QUIT:
-        #        reactor.stop()
-        #        pygame.quit()
-        #
-        #    elif event.type == pygame.MOUSEMOTION:
-        #        self.handleMouse(event)
+        # self.clock.tick(self.FRAMES_PER_SECOND)
 
         # make it loop
         t = time.time() - clockTick
-        # log("tts :" + str(t))
+        log("tts :" + str(t))
         if (t > 0.02):
             reactor.callLater(0.001, self.gameLoop)
         else:

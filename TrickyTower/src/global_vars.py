@@ -31,3 +31,11 @@ Lshape = "./src/assets/Game_Assets/L.png"
 L2shape = "./src/assets/Game_Assets/L_2.png"
 Tshape = "./src/assets/Game_Assets/T.png"
 Ishape = "./src/assets/Game_Assets/I.png"
+
+IMGRshape = None
+IMGSshape = None
+IMGS2shape = None
+IMGLshape = None
+IMGL2shape = None
+IMGTshape = None
+IMGIshape = None
