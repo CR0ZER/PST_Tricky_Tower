@@ -23,6 +23,7 @@ height = 1600
 width = 900
 background_menu = "./src/assets/background_menu.png"
 background_game = "./src/assets/background_game.png"
+font = "./src/assets/Game_Assets/telelower.ttf"
 
 Rshape = "./src/assets/Game_Assets/R.png"
 Sshape = "./src/assets/Game_Assets/S.png"
