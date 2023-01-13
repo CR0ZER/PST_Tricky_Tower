@@ -36,6 +36,7 @@ class Engine:
     def changeState(self):
         reactor.callLater(1, self.sendPlayerPacket)
         log("boom2")
+        g.gameState = 1
 
     def init(self):
 
@@ -70,7 +71,7 @@ class Engine:
         g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
         g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
         g.IMGflag = pygame.image.load(g.flag).convert_alpha()
-        g.IMGflag = pygame.transform.scale(g.IMGflag, (1600, 100))
+        g.IMGflag = pygame.transform.scale(g.IMGflag, (1600, 20))
 
         menu2 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -205,8 +206,6 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
-            
-            self.Rectangle(0,600) #flag
 
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
@@ -252,6 +251,7 @@ class Engine:
 
         elif g.gameState == MENU_REGISTER:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
+            self.screen.blit(g.IMGflag, (0, 400))
             self.sprite_group.draw(self.screen)
 
         elif g.gameState == MENU_CHAR:
