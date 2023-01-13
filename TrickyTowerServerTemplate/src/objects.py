@@ -73,6 +73,7 @@ class Game():
         p = self.players[index]
 
         if p.key[DIR_UP] == True:  # rotate
+            p.block.body.angle += 1.57079632679  # Pi/2
             p.key[DIR_UP] = False
 
         if p.key[DIR_LEFT] == True:  # move left
