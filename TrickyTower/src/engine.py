@@ -27,7 +27,6 @@ class Engine:
         self.screen = None
         self.clock = None
         self.space = None
-        self.nbPlayer = 0
         self.shape = None
         self.menu = None
         self.background = None
@@ -76,11 +75,13 @@ class Engine:
         g.IMGIshape = pygame.transform.scale(g.IMGIshape, (60, 60))
         g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
         g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
+        g.IMGflag = pygame.image.load(g.flag).convert_alpha()
+        g.IMGflag = pygame.transform.scale(g.IMGflag, (1600, 100))
 
         menu2 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu2.add.vertical_margin(200)
-        menu2.add.label(title=f'Nombre de joueurs : {self.nbPlayer}', font_color=(
+        menu2.add.label(title=f'Nombre de joueurs : {g.nbPlayers}', font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.vertical_margin(50)
         menu2.add.button('Prêt', self.changeState2, font_color=(
@@ -206,6 +207,8 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
+            
+            self.Rectangle(0,600) #flag
 
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
@@ -254,7 +257,17 @@ class Engine:
             self.sprite_group.draw(self.screen)
 
         elif g.gameState == MENU_CHAR:
-            pass
+            pygame.font.init()
+            my_font = pygame.font.Font(g.font, 100)
+            text_surface = my_font.render(f"Joueur {g.winner} a gagné !", True, pygame.color.Color("white"))
+            text_rect = text_surface.get_rect()
+            text_rect.center = (800, 450)
+            self.screen.blit(pygame.image.load(g.background_game), (0, 0))
+            self.screen.blit(text_surface, text_rect)
+            pygame.display.update()
+            self.disconnect()
+            time.sleep(10)
+            g.gameState = 0
 
         elif g.gameState == MENU_NEWCHAR:
             pass
