@@ -39,7 +39,7 @@ class DataHandler:
     def handleBlock(self, jsonData):
         g.NewBlock.append((Vec2d(jsonData[0]["positionX"], jsonData[0]["positionY"]), Vec2d(
             jsonData[0]["rotationX"], jsonData[0]["rotationY"]), jsonData[0]["type"]))
-        #log(f"Type : {g.NewBlock[0][2]} \n")
+        # log(f"Type : {g.NewBlock[0][2]} \n")
         # log("position" + str(jsonData[0]["positionY"]))
 
     def handleAlertMsg(self, jsonData):
@@ -55,7 +55,7 @@ class DataHandler:
         g.Blocks = g.NewBlock.copy()
 
     def handlePlayerCount(self, jsonData):
-        g.nbPlayers = jsonData[0]["nbPlayers"]
+        g.nbPlayers = jsonData[0]["number"]
 
     def handleGameStart(self):
         g.gameState = 1

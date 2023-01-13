@@ -163,13 +163,14 @@ def serverLoop():
     if g.gameState == 0:
         sendPlayerCount()
         # si tout les joueurs sont prets
-        if g.game.nbplayer == len(g.conn.factory.clients):
+        if g.game.nbplayer == len(g.conn.factory.clients) and g.game.nbplayer >= 1:
             g.gameState = 1
 
     elif g.gameState == 1:
         sendGameStart()
         g.game.launch()
         g.gameState = 2
+        sendBlock()
 
     elif g.gameState == 2:
         g.game.space.step(0.02)

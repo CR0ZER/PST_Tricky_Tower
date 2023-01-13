@@ -28,7 +28,7 @@ class Engine:
         self.clock = None
         self.space = None
         self.shape = None
-        self.menu = None      
+        self.menu = None
         self.background = None
 
         self.sprite_group = pygame.sprite.Group()
@@ -84,9 +84,9 @@ class Engine:
             255, 255, 255), font_name=g.font, font_size=50)
 
         def connectAndUpdate():
-                g.gameEngine.initConnection()
-                link = menu1.add.menu_link(menu2)
-                link.open()
+            g.gameEngine.initConnection()
+            link = menu1.add.menu_link(menu2)
+            link.open()
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -205,8 +205,8 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
-            
-            self.Rectangle(0,600) #flag
+
+            self.Rectangle(0, 600)  # flag
 
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
@@ -257,7 +257,8 @@ class Engine:
         elif g.gameState == MENU_CHAR:
             pygame.font.init()
             my_font = pygame.font.Font(g.font, 100)
-            text_surface = my_font.render(f"Joueur {g.winner} a gagné !", True, pygame.color.Color("white"))
+            text_surface = my_font.render(
+                f"Joueur {g.winner} a gagné !", True, pygame.color.Color("white"))
             text_rect = text_surface.get_rect()
             text_rect.center = (800, 450)
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
