@@ -33,8 +33,6 @@ def startServer():
     reactor.listenTCP(2727, factory)
     g.conn = factory.protocol(factory)
 
-    loadGameData()
-
     g.dataHandler = DataHandler()
 
     endTime = time.time()
@@ -74,10 +72,6 @@ def setupLogging():
     g.connectionLogger.setLevel(logging.INFO)
     g.connectionLogger.addHandler(ch)
     g.connectionLogger.addHandler(fh)
-
-
-def loadGameData():
-    pass
 
 
 class gameServerProtocol(LineReceiver):
@@ -156,6 +150,8 @@ def serverLoop():
     win = False
 
     screen.fill(pygame.Color("black"))
+    for event in pygame.event.get():
+        pass
     pygame.draw.line(screen, (255, 0, 0), (0, WIN_HEIGHT),
                      (1080, WIN_HEIGHT), 1)
     g.game.space.debug_draw(print_options)

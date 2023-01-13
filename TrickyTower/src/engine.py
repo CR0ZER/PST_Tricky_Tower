@@ -41,10 +41,9 @@ class Engine:
 
     def changeState2(self):
         g.gameEngine.initConnection()
-        time.sleep(2)
-        self.sendPlayerPacket()
+        reactor.callLater(1, self.sendPlayerPacket)
         log("boom2")
-    
+
     def init(self):
 
         # self.initConfig(g.dataPath + '/config.cfg')
@@ -78,7 +77,6 @@ class Engine:
         g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
         g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
 
-        
         menu2 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu2.add.vertical_margin(200)
@@ -89,7 +87,6 @@ class Engine:
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.button('Retour', action=pygame_menu.events.BACK, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
-        
 
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
@@ -110,10 +107,6 @@ class Engine:
         """starts the connection to the server"""
         connectionProtocol = startConnection()
         g.tcpConn = TCPConnection(connectionProtocol)
-
-    def initConfig(self, configFile):
-        """reads the configuration file"""
-        log("can read config.cfg file here")
 
     def disconnect(self):
         g.connector.disconnect()
@@ -343,61 +336,3 @@ class Engine:
 
         reactor.stop()
         pygame.quit()
-
-    ##################
-    # INPUT SPECIFIC #
-    #################
-
-    def checkInputKeys(self):
-        """checks for input events"""
-
-        def pressed(key):
-            keys = pygame.key.get_pressed()
-
-            if keys[key]:
-                return True
-            else:
-                return False
-
-        if pressed(pygame.K_UP) or pressed(pygame.K_z):
-            g.inpDIR_UP = True
-            g.inpDIR_DOWN = False
-            g.inpDIR_LEFT = False
-            g.inpDIR_RIGHT = False
-
-        elif pressed(pygame.K_DOWN) or pressed(pygame.K_s):
-            g.inpDIR_UP = False
-            g.inpDIR_DOWN = True
-            g.inpDIR_LEFT = False
-            g.inpDIR_RIGHT = False
-
-        elif pressed(pygame.K_LEFT) or pressed(pygame.K_q):
-            g.inpDIR_UP = False
-            g.inpDIR_DOWN = False
-            g.inpDIR_LEFT = True
-            g.inpDIR_RIGHT = False
-
-        elif pressed(pygame.K_RIGHT) or pressed(pygame.K_d):
-            g.inpDIR_UP = False
-            g.inpDIR_DOWN = False
-            g.inpDIR_LEFT = False
-            g.inpDIR_RIGHT = True
-
-        else:
-            g.inpDIR_UP = False
-            g.inpDIR_DOWN = False
-            g.inpDIR_LEFT = False
-            g.inpDIR_RIGHT = False
-            g.inpSHIFT = False
-            g.inpCTRL = False
-
-    def handleMouse(self, event):
-        g.cursorX = event.pos[0]
-        g.cursorY = event.pos[1]
-
-        # only set mouse tile position within game screen boundaries
-        # if g.cursorX > 16 and g.cursorX < (16 + 15 * PIC_X):
-        # g.cursorXTile = (g.cursorX - 16) // PIC_X
-        ##
-        # if g.cursorY > 16 and g.cursorY < (16 + 11 * PIC_Y):
-        # g.cursorYTile = (g.cursorY - 16) // PIC_Y
