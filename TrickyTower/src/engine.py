@@ -78,7 +78,7 @@ class Engine:
         menu2.add.label(title=f'Nombre de joueurs : {g.nbPlayers}', font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.vertical_margin(50)
-        menu2.add.button('Prêt', self.changeState, font_color=(
+        menu2.add.button('Jouer', self.changeState, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.button('Retour', action=pygame_menu.events.BACK, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
@@ -91,7 +91,7 @@ class Engine:
         menu1 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu1.add.vertical_margin(200)
-        menu1.add.button('Jouer', action=connectAndUpdate, font_color=(
+        menu1.add.button('Suivant', action=connectAndUpdate, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu1.add.button('The useless button', action=None, font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
