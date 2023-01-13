@@ -122,60 +122,58 @@ class Engine:
             super().__init__()
             self.image = g.IMGTshape.copy()
             self.rect = self.image.get_rect()
-            self.rect.center = (x, y)
+            self.rect.center = (x-35, y-45)
 
     class LShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGLshape
-            self.rect = self.image.get_rect()
             self.image = pygame.transform.rotate(self.image, 180)
-            self.rect.center = (x, y)
+            self.rect = self.image.get_rect()
+            self.rect.center = (x-35, y-45)
 
     class L2Shape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGL2shape
-            self.rect = self.image.get_rect()
             self.image = pygame.transform.rotate(self.image, 180)
-            self.rect.center = (x, y)
+            self.rect = self.image.get_rect()
+            self.rect.center = (x-35, y-45)
 
     class RShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGRshape
             self.rect = self.image.get_rect()
-            self.rect.center = (x-5, y)
+            self.rect.center = (x-35, y-45)
 
     class SShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGSshape
             self.rect = self.image.get_rect()
-            self.image = pygame.transform.rotate(self.image, 180)
-            self.rect.center = (x, y)
+            self.rect.center = (x-35, y-45)
 
     class S2Shape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGS2shape
             self.rect = self.image.get_rect()
-            self.image = pygame.transform.rotate(self.image, 180)
-            self.rect.center = (x, y)
+            self.rect.center = (x-35, y-45)
 
     class IShape(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGIshape
             self.rect = self.image.get_rect()
-            self.rect.center = (x-10, y+10)
+            self.rect.center = (x-35, y-45)
 
     class Rectangle(pygame.sprite.Sprite):
         def __init__(self, x, y):
             super().__init__()
             self.image = g.IMGPlatform
             self.rect = self.image.get_rect()
-            self.rect.center = (x+20, y+40)
+            self.rect.center = (x, y)
 
     def gameLoop(self, FPS=50):
         global clockTick
@@ -187,7 +185,8 @@ class Engine:
         posX = 0
         posY = 0
         for b in g.Blocks:
-            # log(f"position : " + str(b[1].x) + " ; " + str(b[1].y))
+            # log("position : " + str(b[0].x) + " ; " + str(b[0].y) +
+            #    "rotation : " + str(b[1].x) + " ; " + str(b[1].y))
             posX = b[0].x + 300
             posY = b[0].y + 125
             rotX = b[1].x
