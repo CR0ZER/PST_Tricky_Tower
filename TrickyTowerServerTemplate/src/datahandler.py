@@ -22,12 +22,16 @@ class DataHandler():
                 self.handleQuit(index)
             elif packetType == ClientPackets.CArrowKey:
                 self.handleKey(index, jsonData)
+            elif packetType == ClientPackets.CNewPlayer:
+                self.handleNewPlayer()
 
             else:
                 # Packet is unknown - hacking attempt
                 log(str(index) + 'Packet Modification')
 
     ''' Player login '''
+    def handleNewPlayer():
+        g.game.nbplayer += 1
 
     def handleLogin(self, index, jsonData):
         if not isLoggedIn(index):

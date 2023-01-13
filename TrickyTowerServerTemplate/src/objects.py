@@ -58,11 +58,19 @@ class Game():
             if self.players[index].BeginWinTime == None:
                 self.players[index].BeginWinTime = g.clockTime
             elif self.players[index].BeginWinTime + 3 < g.clockTime:
-                log("player " + str(index) + " WIN !")
-                return False
+                return index
         else:
             self.players[index].BeginWinTime = None
-        return True
+        return False
+
+    def breakdown(self):
+        for b in self.blocks:
+            self.clear(b)
+        for i in range(self.nbplayer):
+            self.clear(self.players[i].block)
+            self.players[i] = Player()
+        for bb in self.static_Blocks:
+            self.clear(bb)
 
     def clear(self, b):
         if b.type >= 3:
@@ -136,7 +144,7 @@ class Game():
             p.block.body.sleep()
 
     def launch(self):
-        for i in range(4):
+        for i in range(self.nbplayer):
             self.static_Blocks.append(Block())
             self.static_Blocks[i].type = 0
             self.static_Blocks[i].body = pymunk.Body(
@@ -154,7 +162,7 @@ class Game():
         for b in self.blocks:
             if b.body.position.y > 750 or b.body.position.x < 5 or (b.body.position.x > 250 - MARGIN and b.body.position.x < 250 + MARGIN) or (b.body.position.x > 500 - MARGIN and b.body.position.x < 500 + MARGIN) or (b.body.position.x > 750 - MARGIN and b.body.position.x < 750 + MARGIN) or b.body.position.x > 1000 - MARGIN:
                 self.clear(b)
-        for i in range(MAX_PLAYERS):
+        for i in range(g.game.nbplayer):
             if self.players[i].block.body.position.y > 730:
                 self.clear(self.players[i].block)
                 self.createRamdomBlock(i)

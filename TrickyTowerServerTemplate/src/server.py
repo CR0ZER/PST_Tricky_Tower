@@ -44,7 +44,6 @@ def startServer():
 
     # start the server loop and the reactor
     g.game = Game()
-    g.game.launch()
 
     serverLoop()
     reactor.run()
@@ -150,33 +149,50 @@ print_options = pymunk.pygame_util.DrawOptions(screen)
 # print_options = pymunk.SpaceDebugDrawOptions()  # For easy printing
 # print_options.flags = pymunk.SpaceDebugDrawOptions.DRAW_SHAPES
 
-enablePh = True
-
 
 def serverLoop():
-    global enablePh
-    g.clockTime = time.time()
 
-    if enablePh == True:
-        g.game.space.step(0.02)
-        g.game.removeFalledBlocks()
-        for i in range(4):
-            g.game.playerInput(i)
-            g.game.playerMove(i)
-            g.game.checkPlayerCollide(i)
-            g.game.areYaWinningSon(i)
+    g.clockTime = time.time()
+    win = False
 
     screen.fill(pygame.Color("black"))
     pygame.draw.line(screen, (255, 0, 0), (0, WIN_HEIGHT),
                      (1080, WIN_HEIGHT), 1)
     g.game.space.debug_draw(print_options)
     pygame.display.flip()
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                enablePh = not (enablePh)
+    # for event in pygame.event.get():
+    #    if event.type == pygame.KEYDOWN:
+    #        if event.key == pygame.K_SPACE:
+    #            enablePh = not (enablePh)
+    if g.gameState == 0:
+        sendPlayerCount()
+        # si tout les joueurs sont prets
+        if g.game.nbplayer == len(g.conn.factory.clients):
+            g.gameState = 1
 
-    sendBlock()  # Envoie tout les blocks aux clients
+    elif g.gameState == 1:
+        sendGameStart()
+        g.game.launch()
+        g.gameState = 2
+
+    elif g.gameState == 2:
+        g.game.space.step(0.02)
+
+        for i in range(g.game.nbplayer):
+            g.game.playerInput(i)
+            g.game.playerMove(i)
+            g.game.checkPlayerCollide(i)
+            win = g.game.areYaWinningSon(i)
+
+        g.game.removeFalledBlocks()
+        sendBlock()  # Envoie tout les blocks aux clients
+        if win:
+            g.gameState = 3
+
+    elif g.gameState == 3:
+        sendWinner(win)
+        log("Winner is" + str(win) + "!")
+        g.game.breakdown()
 
     t = time.time() - g.clockTime
     # log("tts :" + str(t))

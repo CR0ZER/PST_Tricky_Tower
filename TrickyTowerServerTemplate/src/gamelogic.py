@@ -108,7 +108,7 @@ def sendLeftGame(index):
 def sendBlock():
     packet = json.dumps([{"packet": ServerPackets.SBeginBlock}])
     g.conn.sendDataToAll(packet)
-    for i in range(4):
+    for i in range(g.game.nbplayer):
         bp = g.game.players[i].block
         packet = json.dumps([{"packet": ServerPackets.SSendBlock, "positionX": bp.body._get_position().x, "positionY": bp.body._get_position().y, "rotationX": bp.body._get_rotation_vector().x,
                             "rotationY": bp.body._get_rotation_vector().y, "type": bp.type}])
@@ -119,3 +119,22 @@ def sendBlock():
         g.conn.sendDataToAll(packet)
     packet = json.dumps([{"packet": ServerPackets.SEndBlock}])
     g.conn.sendDataToAll(packet)
+
+
+def sendPlayerCount():
+    packet = json.dumps(
+        [{"packet": ServerPackets.SPlayerCount, "number": g.game.nbplayer}])
+    g.conn.sendDataToAll(packet)
+
+
+def sendGameStart():
+    packet = json.dumps(
+        [{"packet": ServerPackets.SGameStart}])
+    g.conn.sendDataToAll(packet)
+
+
+def sendWinner(index):
+    if index:
+        packet = json.dumps(
+            [{"packet": ServerPackets.SWinner, "player": index}])
+        g.conn.sendDataToAll(packet)

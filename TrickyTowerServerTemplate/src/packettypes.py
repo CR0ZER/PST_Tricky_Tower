@@ -4,4 +4,5 @@ class ClientPackets:
 
 
 class ServerPackets:
-    SLoginOK, SSendBlock, SBeginBlock, SEndBlock, SPlayerCount = range(5)
+    SLoginOK, SSendBlock, SBeginBlock, SEndBlock, SPlayerCount, SGameStart, SWinner = range(
+        7)
