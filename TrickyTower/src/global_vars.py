@@ -33,6 +33,7 @@ L2shape = "./src/assets/Game_Assets/L_2.png"
 Tshape = "./src/assets/Game_Assets/T.png"
 Ishape = "./src/assets/Game_Assets/I.png"
 Platform = "./src/assets/Game_Assets/platform.png"
+flag = "./src/assets/Game_Assets/flag.png"
 
 IMGRshape = None
 IMGSshape = None
@@ -42,3 +43,6 @@ IMGL2shape = None
 IMGTshape = None
 IMGIshape = None
 IMGPlatform = None
+IMGflag = None
+
+winner = 0

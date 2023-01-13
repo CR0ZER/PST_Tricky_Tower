@@ -42,8 +42,9 @@ class Engine:
     def changeState2(self):
         g.gameEngine.initConnection()
         time.sleep(2)
-        self.sendPlayerPacket()
+        #self.sendPlayerPacket()
         log("boom2")
+        g.gameState = 1
     
     def init(self):
 
@@ -77,6 +78,8 @@ class Engine:
         g.IMGIshape = pygame.transform.scale(g.IMGIshape, (60, 60))
         g.IMGPlatform = pygame.image.load(g.Platform).convert_alpha()
         g.IMGPlatform = pygame.transform.scale(g.IMGPlatform, (75, 100))
+        g.IMGflag = pygame.image.load(g.flag).convert_alpha()
+        g.IMGflag = pygame.transform.scale(g.IMGflag, (1600, 100))
 
         
         menu2 = pygame_menu.Menu(
@@ -213,6 +216,8 @@ class Engine:
 
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
+            
+            self.Rectangle(0,600) #flag
 
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
@@ -264,7 +269,17 @@ class Engine:
             pass
 
         elif g.gameState == MENU_NEWCHAR:
-            pass
+            pygame.font.init()
+            my_font = pygame.font.Font(g.font, 100)
+            text_surface = my_font.render(f"Joueur {g.winner} a gagné !", True, pygame.color.Color("white"))
+            text_rect = text_surface.get_rect()
+            text_rect.center = (800, 450)
+            self.screen.blit(pygame.image.load(g.background_game), (0, 0))
+            self.screen.blit(text_surface, text_rect)
+            pygame.display.update()
+            self.disconnect()
+            time.sleep(10)
+            g.gameState = 0
 
         elif g.gameState == MENU_INGAME:
             # todo: dirty areas
