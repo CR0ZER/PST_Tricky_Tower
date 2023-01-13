@@ -34,7 +34,7 @@ class Engine:
         self.sprite_group = pygame.sprite.Group()
 
     def changeState(self):
-        reactor.callLater(1, self.sendPlayerPacket)
+        reactor.callLater(5, self.sendPlayerPacket)
         log("boom2")
 
     def init(self):
@@ -75,7 +75,7 @@ class Engine:
         menu2 = pygame_menu.Menu(
             'Tricky Tower', g.height, g.width, theme=theme_background_image)
         menu2.add.vertical_margin(200)
-        menu2.add.label(title=f'Nombre de joueurs : {g.nbPlayers}', font_color=(
+        menu2.add.label(title=f'Connexion du joueur', font_color=(
             255, 255, 255), font_name=g.font, font_size=50)
         menu2.add.vertical_margin(50)
         menu2.add.button('Jouer', self.changeState, font_color=(
@@ -206,8 +206,6 @@ class Engine:
             angle_rad = math.atan2(rotY, rotX)
             angle_deg = math.degrees(angle_rad)
 
-            self.Rectangle(0, 600)  # flag
-
             if type == 0:
                 plateform = self.Rectangle(posX, posY)
                 self.sprite_group.add(plateform)
@@ -252,10 +250,11 @@ class Engine:
 
         elif g.gameState == MENU_REGISTER:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
-            self.screen.blit(g.IMGflag, (0, 400))
+            self.screen.blit(g.IMGflag, (0, 600))
             self.sprite_group.draw(self.screen)
 
         elif g.gameState == MENU_CHAR:
+            self.disconnect()
             pygame.font.init()
             my_font = pygame.font.Font(g.font, 100)
             text_surface = my_font.render(
@@ -265,8 +264,7 @@ class Engine:
             self.screen.blit(pygame.image.load(g.background_game), (0, 0))
             self.screen.blit(text_surface, text_rect)
             pygame.display.update()
-            self.disconnect()
-            time.sleep(10)
+
             g.gameState = 0
 
         elif g.gameState == MENU_NEWCHAR:

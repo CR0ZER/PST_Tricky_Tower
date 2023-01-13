@@ -180,16 +180,18 @@ def serverLoop():
             g.game.playerMove(i)
             g.game.checkPlayerCollide(i)
             win = g.game.areYaWinningSon(i)
+            if win:
+                g.gameState = 3
 
         g.game.removeFalledBlocks()
         sendBlock()  # Envoie tout les blocks aux clients
-        if win:
-            g.gameState = 3
+
 
     elif g.gameState == 3:
         sendWinner(win)
         log("Winner is" + str(win) + "!")
-        g.game.breakdown()
+        reactor.callLater(0.001, exit)
+        # g.game.breakdown()
 
     t = time.time() - g.clockTime
     # log("tts :" + str(t))

@@ -58,7 +58,7 @@ class Game():
             if self.players[index].BeginWinTime == None:
                 self.players[index].BeginWinTime = g.clockTime
             elif self.players[index].BeginWinTime + 3 < g.clockTime:
-                return index
+                return index+1
         else:
             self.players[index].BeginWinTime = None
         return False
@@ -163,7 +163,7 @@ class Game():
             if b.body.position.y > 750 or b.body.position.x < 5 or (b.body.position.x > 250 - MARGIN and b.body.position.x < 250 + MARGIN) or (b.body.position.x > 500 - MARGIN and b.body.position.x < 500 + MARGIN) or (b.body.position.x > 750 - MARGIN and b.body.position.x < 750 + MARGIN) or b.body.position.x > 1000 - MARGIN:
                 self.clear(b)
         for i in range(g.game.nbplayer):
-            if self.players[i].block.body.position.y > 730:
+            if self.players[i].block.body.position.y > 750:
                 self.clear(self.players[i].block)
                 self.createRamdomBlock(i)
 
